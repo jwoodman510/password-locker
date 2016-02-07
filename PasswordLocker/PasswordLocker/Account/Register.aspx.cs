@@ -4,7 +4,6 @@ using System.Web;
 using System.Web.UI;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
-using Owin;
 using PasswordLocker.Models;
 
 namespace PasswordLocker.Account
@@ -13,12 +12,26 @@ namespace PasswordLocker.Account
     {
         protected void CreateUser_Click(object sender, EventArgs e)
         {
+            var companyId = GetCompanyId();
+
+            if (companyId < 1)
+            {
+                ErrorMessage.Text = "Invalid Company";
+                return;
+            }
+
             var manager = Context.GetOwinContext().GetUserManager<ApplicationUserManager>();
             var signInManager = Context.GetOwinContext().Get<ApplicationSignInManager>();
-            var user = new ApplicationUser() { UserName = Email.Text, Email = Email.Text };
-            IdentityResult result = manager.Create(user, Password.Text);
+            var user = new ApplicationUser { UserName = Email.Text, Email = Email.Text };
+
+            var result = manager.Create(user, Password.Text);
             if (result.Succeeded)
             {
+                AddUserToCompany(companyId);
+
+                //todo: finish and validate
+                manager.AddToRole(user.Id, "");
+
                 // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                 //string code = manager.GenerateEmailConfirmationToken(user.Id);
                 //string callbackUrl = IdentityHelper.GetUserConfirmationRedirectUrl(code, user.Id, Request);
@@ -31,6 +44,20 @@ namespace PasswordLocker.Account
             {
                 ErrorMessage.Text = result.Errors.FirstOrDefault();
             }
+        }
+
+        private int GetCompanyId()
+        {
+            var company = Company.Text.ToLower();
+
+            //todo: try get company
+
+            return 0;
+        }
+
+        private void AddUserToCompany(int companyId)
+        {
+            //todo: this
         }
     }
 }

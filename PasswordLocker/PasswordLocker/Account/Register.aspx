@@ -17,6 +17,12 @@
                 <asp:RequiredFieldValidator runat="server" ControlToValidate="Email"
                     CssClass="text-danger" ErrorMessage="The email field is required." />
             </div>
+            <div>
+            <asp:Label runat="server" AssociatedControlID="Company" CssClass="col-md-2 control-label">Company</asp:Label>
+                <asp:TextBox runat="server" ID="Company" CssClass="form-control" />
+                <asp:RequiredFieldValidator runat="server" ControlToValidate="Company"
+                    CssClass="text-danger" ErrorMessage="The company field is required." />
+            </div>
         </div>
         <div class="form-group">
             <asp:Label runat="server" AssociatedControlID="Password" CssClass="col-md-2 control-label">Password</asp:Label>
