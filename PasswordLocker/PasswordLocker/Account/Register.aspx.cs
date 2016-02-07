@@ -2,17 +2,21 @@
 using System.Linq;
 using System.Web;
 using System.Web.UI;
+using DataAccess.Dal;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
+using Microsoft.Practices.Unity;
 using PasswordLocker.Models;
 
 namespace PasswordLocker.Account
 {
     public partial class Register : Page
     {
+        [Dependency] public ICompanyDal CompanyDal { get; set; }
+
         protected void CreateUser_Click(object sender, EventArgs e)
         {
-            var companyId = GetCompanyId();
+            var companyId = CompanyDal.Get(Company.Text)?.CompanyId ?? 0;
 
             if (companyId < 1)
             {
@@ -44,15 +48,6 @@ namespace PasswordLocker.Account
             {
                 ErrorMessage.Text = result.Errors.FirstOrDefault();
             }
-        }
-
-        private int GetCompanyId()
-        {
-            var company = Company.Text.ToLower();
-
-            //todo: try get company
-
-            return 0;
         }
 
         private void AddUserToCompany(int companyId)

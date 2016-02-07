@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 namespace DataAccess.Dal
 {
@@ -19,7 +20,7 @@ namespace DataAccess.Dal
         {
             return _context.Companies
                 .AsNoTracking()
-                .FirstOrDefault(c => c.CompanyName == name);
+                .FirstOrDefault(c => c.CompanyName.Equals(name, StringComparison.CurrentCultureIgnoreCase));
         }
     }
 }
