@@ -5,14 +5,12 @@ using System.Web.UI;
 using DataAccess.Dal;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Practices.Unity;
 using PasswordLocker.Models;
 
 namespace PasswordLocker.Account
 {
     public partial class Register : Page
     {
-        //[Dependency]
         public ICompanyDal CompanyDal { get; set; }
 
         protected void CreateUser_Click(object sender, EventArgs e)

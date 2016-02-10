@@ -3,13 +3,11 @@ using System.Web;
 using System.Web.UI;
 using DataAccess.Dal;
 using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Practices.Unity;
 
 namespace PasswordLocker.Account
 {
     public partial class Login : Page
     {
-        //[Dependency]
         public ICompanyDal CompanyDal { get; set; }
 
         protected void Page_Load(object sender, EventArgs e)
