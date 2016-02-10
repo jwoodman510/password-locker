@@ -9,7 +9,7 @@ namespace PasswordLocker.Account
 {
     public partial class Login : Page
     {
-        [Dependency]
+        //[Dependency]
         public ICompanyDal CompanyDal { get; set; }
 
         protected void Page_Load(object sender, EventArgs e)
