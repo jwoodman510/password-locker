@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Linq;
 using System.Web;
-using System.Web.UI;
 using DataAccess.Dal;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
+using PasswordLocker.Bootstrap;
 using PasswordLocker.Models;
 
 namespace PasswordLocker.Account
 {
-    public partial class Register : Page
+    public partial class Register : BaseIoCPage
     {
         public ICompanyDal CompanyDal { get; set; }
 

@@ -2,6 +2,7 @@
 using System.Web;
 using System.Web.Optimization;
 using System.Web.Routing;
+using PasswordLocker.Bootstrap;
 
 namespace PasswordLocker
 {
@@ -11,6 +12,7 @@ namespace PasswordLocker
         {
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+            IoC.BuildUp(this);
         }
     }
 }
