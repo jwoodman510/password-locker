@@ -15,8 +15,6 @@ namespace DataAccess
         void SetEntryModified<T>(T entity) where T : class;
 
         int SaveChanges();
-
-        void Dispose();
     }
 
     public class ContextProvider : IContextProvider
@@ -58,11 +56,6 @@ namespace DataAccess
             {
                 throw new ModificationException("An unexpected error occured. Changes were not saved.", ex);
             }
-        }
-
-        public void Dispose()
-        {
-            _context.Dispose();
         }
     }
 }
