@@ -22,6 +22,8 @@
 *.scc
 *.jim
 *.dbmdl
+*.ldf
+*.mdf
 
 source/packages/*
 [Tt]est[Rr]esult*
