@@ -81,7 +81,6 @@
       <DependentUpon>Entities.tt</DependentUpon>
     </Compile>
     <Compile Include="Dal\ICompanyDal.cs" />
-    <Compile Include="DataAccessRegistry.cs" />
     <Compile Include="Department.cs">
       <DependentUpon>Entities.tt</DependentUpon>
     </Compile>

@@ -1,5 +1,7 @@
 using System.Web;
 using Caching;
+using DataAccess;
+using DataAccess.Dal;
 using Microsoft.Practices.Unity;
 using PasswordLocker;
 using Unity.WebForms;
@@ -33,7 +35,8 @@ namespace PasswordLocker
 		/// <param name="container">Instance of the container to populate.</param>
 		private static void RegisterDependencies( IUnityContainer container )
 		{
-            DataAccess.DataAccessRegistry.Register(container);
+            container.RegisterType<IContextProvider, ContextProvider>();
+            container.RegisterType<ICompanyDal, CompanyDal>();
             container.RegisterType<ICache, Cache>(new ContainerControlledLifetimeManager());
         }
 	}
