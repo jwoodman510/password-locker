@@ -12,7 +12,8 @@ namespace PasswordLocker.Account
 {
     public partial class Register : Page
     {
-        [Dependency] public ICompanyDal CompanyDal { get; set; }
+        //[Dependency]
+        public ICompanyDal CompanyDal { get; set; }
 
         protected void CreateUser_Click(object sender, EventArgs e)
         {
