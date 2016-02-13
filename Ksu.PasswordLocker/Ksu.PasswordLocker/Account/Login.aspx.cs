@@ -1,22 +1,17 @@
 ﻿using System;
 using System.Web;
 using System.Web.UI;
-using Ksu.DataAccess.Dal;
-using Ksu.PasswordLocker.Bootstrap;
 using Microsoft.AspNet.Identity.Owin;
 
 namespace Ksu.PasswordLocker.Account
 {
     public partial class Login : Page
     {
-        private readonly ICompanyDal _companyDal = IoC.Resolve<ICompanyDal>();
-
         protected void Page_Load(object sender, EventArgs e)
         {
             RegisterHyperLink.NavigateUrl = "Register";
             // Enable this once you have account confirmation enabled for password reset functionality
             //ForgotPasswordHyperLink.NavigateUrl = "Forgot";
-            OpenAuthLogin.ReturnUrl = Request.QueryString["ReturnUrl"];
             var returnUrl = HttpUtility.UrlEncode(Request.QueryString["ReturnUrl"]);
             if (!string.IsNullOrEmpty(returnUrl))
             {
@@ -29,7 +24,6 @@ namespace Ksu.PasswordLocker.Account
             if (IsValid)
             {
                 // Validate the user password
-                var manager = Context.GetOwinContext().GetUserManager<ApplicationUserManager>();
                 var signinManager = Context.GetOwinContext().GetUserManager<ApplicationSignInManager>();
 
                 // This doen't count login failures towards account lockout
@@ -45,12 +39,10 @@ namespace Ksu.PasswordLocker.Account
                         Response.Redirect("/Account/Lockout");
                         break;
                     case SignInStatus.RequiresVerification:
-                        Response.Redirect(String.Format("/Account/TwoFactorAuthenticationSignIn?ReturnUrl={0}&RememberMe={1}", 
-                                                        Request.QueryString["ReturnUrl"],
-                                                        RememberMe.Checked),
+                        Response.Redirect(
+                            $"/Account/TwoFactorAuthenticationSignIn?ReturnUrl={Request.QueryString["ReturnUrl"]}&RememberMe={RememberMe.Checked}",
                                           true);
                         break;
-                    case SignInStatus.Failure:
                     default:
                         FailureText.Text = "Invalid login attempt";
                         ErrorMessage.Visible = true;

@@ -1,5 +1,6 @@
 ﻿using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.Linq;
 using Ksu.DataAccess.Exception;
 
 namespace Ksu.DataAccess
@@ -7,6 +8,8 @@ namespace Ksu.DataAccess
     public interface IContextProvider
     {
         DbSet<Company> Companies { get; set; }
+
+        DbSet<AspNetUser> Users { get; set; }
 
         DbEntityEntry<TEntity> Entry<TEntity>(TEntity entity) where TEntity : class;
 
@@ -29,6 +32,12 @@ namespace Ksu.DataAccess
         {
             get { return _context.Companies; }
             set { _context.Companies = value; }
+        }
+
+        public DbSet<AspNetUser> Users
+        {
+            get { return _context.AspNetUsers; }
+            set { _context.AspNetUsers = value; }
         }
 
         public DbEntityEntry<TEntity> Entry<TEntity>(TEntity entity) where TEntity : class

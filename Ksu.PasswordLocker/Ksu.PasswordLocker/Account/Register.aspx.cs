@@ -2,35 +2,58 @@
 using System.Linq;
 using System.Web;
 using System.Web.UI;
+using Ksu.DataAccess.Dal;
+using Ksu.Global.Constants;
+using Ksu.PasswordLocker.Bootstrap;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
-using Owin;
 using Ksu.PasswordLocker.Models;
 
 namespace Ksu.PasswordLocker.Account
 {
     public partial class Register : Page
     {
+        private readonly ICompanyDal _companyDal = IoC.Resolve<ICompanyDal>();
+
         protected void CreateUser_Click(object sender, EventArgs e)
         {
+            var company = _companyDal.Get(Company.Text);
+
+            if (company == null)
+            {
+                ErrorMessage.Text = "Company not found.";
+                return;
+            }
+
+            if (!string.IsNullOrEmpty(company.Domain))
+            {
+                if (!Email.Text.EndsWith(company.Domain))
+                {
+                    ErrorMessage.Text = $"Unauthorized company email. Must include the domain: {company.Domain}.";
+                    return;
+                }
+            }
+
             var manager = Context.GetOwinContext().GetUserManager<ApplicationUserManager>();
             var signInManager = Context.GetOwinContext().Get<ApplicationSignInManager>();
-            var user = new ApplicationUser() { UserName = Email.Text, Email = Email.Text };
-            IdentityResult result = manager.Create(user, Password.Text);
+            var user = new ApplicationUser { UserName = Email.Text, Email = Email.Text };
+            var result = manager.Create(user, Password.Text);
             if (result.Succeeded)
             {
-                // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
-                //string code = manager.GenerateEmailConfirmationToken(user.Id);
-                //string callbackUrl = IdentityHelper.GetUserConfirmationRedirectUrl(code, user.Id, Request);
-                //manager.SendEmail(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>.");
-
-                signInManager.SignIn( user, isPersistent: false, rememberBrowser: false);
+                AddRoleAndCompany(user, manager, company.CompanyId);
+                signInManager.SignIn(user, false, false);
                 IdentityHelper.RedirectToReturnUrl(Request.QueryString["ReturnUrl"], Response);
             }
             else 
             {
                 ErrorMessage.Text = result.Errors.FirstOrDefault();
             }
+        }
+
+        private void AddRoleAndCompany(ApplicationUser user, ApplicationUserManager manager, int companyId)
+        {
+            manager.AddToRole(user.Id, Roles.CompanyUser);
+            _companyDal.AddUser(companyId, user.Id);
         }
     }
 }
