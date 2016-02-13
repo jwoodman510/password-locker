@@ -1,6 +1,8 @@
-﻿using Ksu.DataAccess;
+﻿using Ksu.Caching;
+using Ksu.DataAccess;
 using Ksu.DataAccess.Dal;
 using StructureMap;
+using StructureMap.Pipeline;
 
 namespace Ksu.PasswordLocker.Bootstrap
 {
@@ -10,7 +12,7 @@ namespace Ksu.PasswordLocker.Bootstrap
         {
             For<IContextProvider>().Use<ContextProvider>();
             For<ICompanyDal>().Use<CompanyDal>();
-            //For<ICache>().Use<Cache>().SetLifecycleTo<SingletonLifecycle>();
+            For<ICache>().Use<Cache>().SetLifecycleTo<SingletonLifecycle>();
         }
     }
 }

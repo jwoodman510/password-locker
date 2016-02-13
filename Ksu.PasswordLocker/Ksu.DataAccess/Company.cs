@@ -24,6 +24,7 @@ namespace Ksu.DataAccess
     
         public int CompanyId { get; set; }
         public string CompanyName { get; set; }
+        public string Domain { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Department> Departments { get; set; }

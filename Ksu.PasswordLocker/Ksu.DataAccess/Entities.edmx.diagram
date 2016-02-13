@@ -4,17 +4,13 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="614a8fba7b514f5c9f702226d86cc03d" Name="Diagram1">
-        <EntityTypeShape EntityType="PM_SQLModel.AspNetRole" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="PM_SQLModel.AspNetUserClaim" Width="1.5" PointX="7.5" PointY="2.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="PM_SQLModel.AspNetUserLogin" Width="1.5" PointX="7.5" PointY="9.25" IsExpanded="true" />
+      <Diagram DiagramId="678ae6a8c9d54043b623528c499d6f48" Name="Diagram1">
+        <EntityTypeShape EntityType="PM_SQLModel.AspNetRole" Width="1.5" PointX="3" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="PM_SQLModel.AspNetUser" Width="1.5" PointX="5.25" PointY="3.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="PM_SQLModel.Company" Width="1.5" PointX="0.75" PointY="5.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="PM_SQLModel.Department" Width="1.5" PointX="3" PointY="4.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="PM_SQLModel.ServerLogin" Width="1.5" PointX="8.25" PointY="5.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="PM_SQLModel.Server" Width="1.5" PointX="3" PointY="7" IsExpanded="true" />
-        <AssociationConnector Association="PM_SQLModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
-        <AssociationConnector Association="PM_SQLModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="PM_SQLModel.Company" Width="1.5" PointX="0.75" PointY="5.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="PM_SQLModel.Department" Width="1.5" PointX="3" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="PM_SQLModel.ServerLogin" Width="1.5" PointX="8.25" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="PM_SQLModel.Server" Width="1.5" PointX="3" PointY="6.75" IsExpanded="true" />
         <AssociationConnector Association="PM_SQLModel.FK_Departments_Companies" ManuallyRouted="false" />
         <AssociationConnector Association="PM_SQLModel.FK_Servers_Companies" ManuallyRouted="false" />
         <AssociationConnector Association="PM_SQLModel.FK_ServerLogins_Departments" ManuallyRouted="false" />

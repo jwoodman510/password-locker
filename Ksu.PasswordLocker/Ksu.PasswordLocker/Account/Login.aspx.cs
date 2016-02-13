@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Web;
 using System.Web.UI;
-using Ksu.DataAccess.Dal;
-using Ksu.PasswordLocker.Bootstrap;
 using Microsoft.AspNet.Identity.Owin;
 
 namespace Ksu.PasswordLocker.Account
 {
     public partial class Login : Page
     {
-        private readonly ICompanyDal _companyDal = IoC.Resolve<ICompanyDal>();
-
         protected void Page_Load(object sender, EventArgs e)
         {
             RegisterHyperLink.NavigateUrl = "Register";
