@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Security.Claims;
-using System.Security.Principal;
 using System.Web;
 using System.Web.Security;
 using System.Web.UI;
@@ -69,11 +66,11 @@ namespace Ksu.PasswordLocker
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(Context.User.Identity.Name)
-                && !Context.Request.FilePath.StartsWith("/Account/"))
-            {
-                    Response.Redirect("Account/Login.aspx", true);
-            }
+            //if (string.IsNullOrEmpty(Context.User.Identity.Name)
+            //    && !Context.Request.FilePath.StartsWith("/Account/"))
+            //{
+            //        Response.Redirect("Account/Login.aspx", true);
+            //}
         }
 
         protected void Unnamed_LoggingOut(object sender, LoginCancelEventArgs e)
