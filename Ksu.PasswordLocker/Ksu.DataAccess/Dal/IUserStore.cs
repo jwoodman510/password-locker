@@ -70,7 +70,6 @@ namespace Ksu.DataAccess.Dal
             if (user == null)
                 throw new ArgumentNullException(nameof(user));
 
-
             _context.Users.Remove(user);
             await SaveChanges().ConfigureAwait(false);
         }

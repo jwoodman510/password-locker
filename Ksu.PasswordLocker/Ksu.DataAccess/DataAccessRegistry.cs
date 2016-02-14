@@ -12,6 +12,7 @@ namespace Ksu.DataAccess
             For<IUserDal>().Use<UserDal>();
             For<IUserStore>().Use<UserStore>();
             For<IServerLoginDal>().Use<ServerLoginDal>();
+            For<IDepartmentDal>().Use<DepartmentDal>();
         }
     }
 }

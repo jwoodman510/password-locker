@@ -110,7 +110,13 @@
     <Compile Include="Company.cs">
       <DependentUpon>Entities.tt</DependentUpon>
     </Compile>
+    <Compile Include="Comparers\CompareSetting.cs" />
+    <Compile Include="Comparers\DepartmentComparer.cs" />
+    <Compile Include="Comparers\ServerComparer.cs" />
+    <Compile Include="Comparers\ServerLoginComparer.cs" />
+    <Compile Include="Comparers\UserComparer.cs" />
     <Compile Include="Dal\ICompanyDal.cs" />
+    <Compile Include="Dal\IDepartmentDal.cs" />
     <Compile Include="Dal\IServerLoginDal.cs" />
     <Compile Include="Dal\IUserDal.cs" />
     <Compile Include="Dal\IUserStore.cs" />
@@ -174,6 +180,12 @@
       <DependentUpon>Entities.edmx</DependentUpon>
       <LastGenOutput>Entities.cs</LastGenOutput>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Ksu.Global\Ksu.Global.csproj">
+      <Project>{35d6f335-1fe6-4a9e-b3af-bb14f4830b0d}</Project>
+      <Name>Ksu.Global</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
