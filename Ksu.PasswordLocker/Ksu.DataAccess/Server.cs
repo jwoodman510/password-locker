@@ -18,6 +18,7 @@ namespace Ksu.DataAccess
         public Server()
         {
             this.ServerLogins = new HashSet<ServerLogin>();
+            this.Departments = new HashSet<Department>();
         }
     
         public int ServerId { get; set; }
@@ -27,5 +28,7 @@ namespace Ksu.DataAccess
         public virtual Company Company { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ServerLogin> ServerLogins { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Department> Departments { get; set; }
     }
 }

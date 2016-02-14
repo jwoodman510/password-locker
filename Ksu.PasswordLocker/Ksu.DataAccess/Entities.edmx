@@ -72,6 +72,14 @@
           <Property Name="CompanyId" Type="int" Nullable="false" />
           <Property Name="DepartmentName" Type="nvarchar" MaxLength="300" Nullable="false" />
         </EntityType>
+        <EntityType Name="DepartmentsServers">
+          <Key>
+            <PropertyRef Name="DepartmentId" />
+            <PropertyRef Name="ServerId" />
+          </Key>
+          <Property Name="DepartmentId" Type="int" Nullable="false" />
+          <Property Name="ServerId" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="ServerLogins">
           <Key>
             <PropertyRef Name="ServerLoginId" />
@@ -174,6 +182,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_DepartmentsServers_Departments">
+          <End Role="Departments" Type="Self.Departments" Multiplicity="1" />
+          <End Role="DepartmentsServers" Type="Self.DepartmentsServers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Departments">
+              <PropertyRef Name="DepartmentId" />
+            </Principal>
+            <Dependent Role="DepartmentsServers">
+              <PropertyRef Name="DepartmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DepartmentsServers_Servers">
+          <End Role="Servers" Type="Self.Servers" Multiplicity="1" />
+          <End Role="DepartmentsServers" Type="Self.DepartmentsServers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Servers">
+              <PropertyRef Name="ServerId" />
+            </Principal>
+            <Dependent Role="DepartmentsServers">
+              <PropertyRef Name="ServerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_ServerLogins_Departments">
           <End Role="Departments" Type="Self.Departments" Multiplicity="1" />
           <End Role="ServerLogins" Type="Self.ServerLogins" Multiplicity="*" />
@@ -266,6 +298,7 @@
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Companies" EntityType="Self.Companies" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Departments" EntityType="Self.Departments" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DepartmentsServers" EntityType="Self.DepartmentsServers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ServerLogins" EntityType="Self.ServerLogins" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Servers" EntityType="Self.Servers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UsersCompanies" EntityType="Self.UsersCompanies" Schema="dbo" store:Type="Tables" />
@@ -289,6 +322,14 @@
           <AssociationSet Name="FK_Departments_Companies" Association="Self.FK_Departments_Companies">
             <End Role="Companies" EntitySet="Companies" />
             <End Role="Departments" EntitySet="Departments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DepartmentsServers_Departments" Association="Self.FK_DepartmentsServers_Departments">
+            <End Role="Departments" EntitySet="Departments" />
+            <End Role="DepartmentsServers" EntitySet="DepartmentsServers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DepartmentsServers_Servers" Association="Self.FK_DepartmentsServers_Servers">
+            <End Role="Servers" EntitySet="Servers" />
+            <End Role="DepartmentsServers" EntitySet="DepartmentsServers" />
           </AssociationSet>
           <AssociationSet Name="FK_ServerLogins_Departments" Association="Self.FK_ServerLogins_Departments">
             <End Role="Departments" EntitySet="Departments" />
@@ -352,7 +393,6 @@
           <NavigationProperty Name="Departments" Relationship="Self.UsersDepartments" FromRole="AspNetUsers" ToRole="Departments" />
           <NavigationProperty Name="AspNetUserClaims" Relationship="PM_SQLModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserClaim" />
           <NavigationProperty Name="AspNetUserLogins" Relationship="PM_SQLModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserLogin" />
-          <NavigationProperty Name="Claims" Relationship="PM_SQLModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserClaim" />
         </EntityType>
         <EntityType Name="Company">
           <Key>
@@ -375,6 +415,7 @@
           <NavigationProperty Name="Company" Relationship="Self.FK_Departments_Companies" FromRole="Departments" ToRole="Companies" />
           <NavigationProperty Name="ServerLogins" Relationship="Self.FK_ServerLogins_Departments" FromRole="Departments" ToRole="ServerLogins" />
           <NavigationProperty Name="AspNetUsers" Relationship="Self.UsersDepartments" FromRole="Departments" ToRole="AspNetUsers" />
+          <NavigationProperty Name="Servers" Relationship="PM_SQLModel.DepartmentsServers" FromRole="Department" ToRole="Server" />
         </EntityType>
         <EntityType Name="ServerLogin">
           <Key>
@@ -397,6 +438,7 @@
           <Property Name="ServerName" Type="String" MaxLength="300" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Company" Relationship="Self.FK_Servers_Companies" FromRole="Servers" ToRole="Companies" />
           <NavigationProperty Name="ServerLogins" Relationship="Self.FK_ServerLogins_Servers" FromRole="Servers" ToRole="ServerLogins" />
+          <NavigationProperty Name="Departments" Relationship="PM_SQLModel.DepartmentsServers" FromRole="Server" ToRole="Department" />
         </EntityType>
         <Association Name="FK_Departments_Companies">
           <End Role="Companies" Type="Self.Company" Multiplicity="1" />
@@ -503,6 +545,10 @@
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
             <End Role="AspNetUserLogin" EntitySet="AspNetUserLogins" />
           </AssociationSet>
+          <AssociationSet Name="DepartmentsServers" Association="PM_SQLModel.DepartmentsServers">
+            <End Role="Department" EntitySet="Departments" />
+            <End Role="Server" EntitySet="Servers" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="AspNetUserClaim">
           <Key>
@@ -552,6 +598,10 @@
               <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
+        </Association>
+        <Association Name="DepartmentsServers">
+          <End Type="PM_SQLModel.Department" Role="Department" Multiplicity="*" />
+          <End Type="PM_SQLModel.Server" Role="Server" Multiplicity="*" />
         </Association>
       </Schema>
     </edmx:ConceptualModels>
@@ -666,6 +716,14 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <AssociationSetMapping Name="DepartmentsServers" TypeName="PM_SQLModel.DepartmentsServers" StoreEntitySet="DepartmentsServers">
+            <EndProperty Name="Server">
+              <ScalarProperty Name="ServerId" ColumnName="ServerId" />
+            </EndProperty>
+            <EndProperty Name="Department">
+              <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
+            </EndProperty>
+          </AssociationSetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

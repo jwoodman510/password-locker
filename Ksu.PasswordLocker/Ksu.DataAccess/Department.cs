@@ -19,6 +19,7 @@ namespace Ksu.DataAccess
         {
             this.ServerLogins = new HashSet<ServerLogin>();
             this.AspNetUsers = new HashSet<AspNetUser>();
+            this.Servers = new HashSet<Server>();
         }
     
         public int DepartmentId { get; set; }
@@ -30,5 +31,7 @@ namespace Ksu.DataAccess
         public virtual ICollection<ServerLogin> ServerLogins { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AspNetUser> AspNetUsers { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Server> Servers { get; set; }
     }
 }
