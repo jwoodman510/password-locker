@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Web;
+using Ksu.DataAccess;
+using Ksu.PasswordLocker.Identity;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
@@ -93,8 +95,8 @@ namespace Ksu.PasswordLocker.Account
             }
             var manager = Context.GetOwinContext().GetUserManager<ApplicationUserManager>();
             var signInManager = Context.GetOwinContext().GetUserManager<ApplicationSignInManager>();
-            var user = new ApplicationUser() { UserName = email.Text, Email = email.Text };
-            IdentityResult result = manager.Create(user);
+            var user = new AspNetUser { UserName = email.Text, Email = email.Text };
+            var result = manager.Create(user);
             if (result.Succeeded)
             {
                 var loginInfo = Context.GetOwinContext().Authentication.GetExternalLoginInfo();

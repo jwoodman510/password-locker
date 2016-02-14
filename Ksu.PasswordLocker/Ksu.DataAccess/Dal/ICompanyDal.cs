@@ -9,7 +9,7 @@ namespace Ksu.DataAccess.Dal
         Company Get(string name);
         Company Get(int id);
 
-        void AddUser(int companyId, string userId);
+        void AddUser(int id, string userId);
     }
 
     public class CompanyDal : ICompanyDal
@@ -34,9 +34,9 @@ namespace Ksu.DataAccess.Dal
                 .FirstOrDefault(c => c.CompanyId == id);
         }
 
-        public void AddUser(int companyId, string userId)
+        public void AddUser(int id, string userId)
         {
-            var company = Get(companyId);
+            var company = _context.Companies.Find(id);
             var user = _context.Users.Find(userId);
 
             company.AspNetUsers = company.AspNetUsers ?? new List<AspNetUser>();

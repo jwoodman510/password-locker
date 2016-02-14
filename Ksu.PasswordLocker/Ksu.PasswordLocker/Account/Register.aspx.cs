@@ -2,9 +2,11 @@
 using System.Linq;
 using System.Web;
 using System.Web.UI;
+using Ksu.DataAccess;
 using Ksu.DataAccess.Dal;
 using Ksu.Global.Constants;
 using Ksu.PasswordLocker.Bootstrap;
+using Ksu.PasswordLocker.Identity;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Ksu.PasswordLocker.Models;
@@ -14,6 +16,7 @@ namespace Ksu.PasswordLocker.Account
     public partial class Register : Page
     {
         private readonly ICompanyDal _companyDal = IoC.Resolve<ICompanyDal>();
+        private readonly IUserDal _userDal = IoC.Resolve<IUserDal>();
 
         protected void CreateUser_Click(object sender, EventArgs e)
         {
@@ -36,11 +39,11 @@ namespace Ksu.PasswordLocker.Account
 
             var manager = Context.GetOwinContext().GetUserManager<ApplicationUserManager>();
             var signInManager = Context.GetOwinContext().Get<ApplicationSignInManager>();
-            var user = new ApplicationUser { UserName = Email.Text, Email = Email.Text };
+            var user = new AspNetUser { UserName = Email.Text, Email = Email.Text };
             var result = manager.Create(user, Password.Text);
             if (result.Succeeded)
             {
-                AddRoleAndCompany(user, manager, company.CompanyId);
+                AddRoleAndCompany(user, company.CompanyId);
                 signInManager.SignIn(user, false, false);
                 IdentityHelper.RedirectToReturnUrl(Request.QueryString["ReturnUrl"], Response);
             }
@@ -50,9 +53,9 @@ namespace Ksu.PasswordLocker.Account
             }
         }
 
-        private void AddRoleAndCompany(ApplicationUser user, ApplicationUserManager manager, int companyId)
+        private void AddRoleAndCompany(AspNetUser user, int companyId)
         {
-            manager.AddToRole(user.Id, Roles.CompanyUser);
+            _userDal.AddToRole(user.Id, Roles.SysAdmin);
             _companyDal.AddUser(companyId, user.Id);
         }
     }

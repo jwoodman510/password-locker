@@ -1,5 +1,4 @@
 ﻿using Ksu.DataAccess;
-using Ksu.DataAccess.Dal;
 using StructureMap;
 
 namespace Ksu.PasswordLocker.Bootstrap
@@ -11,6 +10,7 @@ namespace Ksu.PasswordLocker.Bootstrap
         static IoC()
         {
             Container = new Container(new Configuration());
+            Container.Configure(c => c.AddRegistry(new DataAccessRegistry()));
         }
 
         public static T Resolve<T>()

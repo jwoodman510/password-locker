@@ -31,5 +31,7 @@ namespace Ksu.DataAccess
         public virtual DbSet<Department> Departments { get; set; }
         public virtual DbSet<ServerLogin> ServerLogins { get; set; }
         public virtual DbSet<Server> Servers { get; set; }
+        public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
+        public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
     }
 }
