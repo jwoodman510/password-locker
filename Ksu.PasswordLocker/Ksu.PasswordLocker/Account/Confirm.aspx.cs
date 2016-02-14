@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Web;
 using System.Web.UI;
+using Ksu.PasswordLocker.Identity;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
-using Owin;
 using Ksu.PasswordLocker.Models;
 
 namespace Ksu.PasswordLocker.Account

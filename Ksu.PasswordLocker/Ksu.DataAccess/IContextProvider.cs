@@ -1,15 +1,22 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
-using System.Linq;
+using System.Threading.Tasks;
 using Ksu.DataAccess.Exception;
 
 namespace Ksu.DataAccess
 {
-    public interface IContextProvider
+    public interface IContextProvider : IDisposable
     {
         DbSet<Company> Companies { get; set; }
 
         DbSet<AspNetUser> Users { get; set; }
+
+        DbSet<AspNetRole> Roles { get; set; }
+
+        DbSet<AspNetUserLogin> Logins { get; set; }
+
+        DbSet<AspNetUserClaim> Claims { get; set; }
 
         DbEntityEntry<TEntity> Entry<TEntity>(TEntity entity) where TEntity : class;
 
@@ -18,6 +25,10 @@ namespace Ksu.DataAccess
         void SetEntryModified<T>(T entity) where T : class;
 
         int SaveChanges();
+        
+        Task<int> SaveChangesAsync();
+
+        DbSet<TEntity> Set<TEntity>() where TEntity : class;
     }
 
     public class ContextProvider : IContextProvider
@@ -38,6 +49,23 @@ namespace Ksu.DataAccess
         {
             get { return _context.AspNetUsers; }
             set { _context.AspNetUsers = value; }
+        }
+
+        public DbSet<AspNetRole> Roles
+        {
+            get { return _context.AspNetRoles; }
+            set { _context.AspNetRoles = value; }
+        }
+
+        public DbSet<AspNetUserLogin> Logins
+        {
+            get { return _context.AspNetUserLogins; }
+            set { _context.AspNetUserLogins = value; }
+        }
+        public DbSet<AspNetUserClaim> Claims
+        {
+            get { return _context.AspNetUserClaims; }
+            set { _context.AspNetUserClaims = value; }
         }
 
         public DbEntityEntry<TEntity> Entry<TEntity>(TEntity entity) where TEntity : class
@@ -65,6 +93,28 @@ namespace Ksu.DataAccess
             {
                 throw new ModificationException("An unexpected error occured. Changes were not saved.", ex);
             }
+        }
+
+        public Task<int> SaveChangesAsync()
+        {
+            try
+            {
+                return _context.SaveChangesAsync();
+            }
+            catch (System.Exception ex)
+            {
+                throw new ModificationException("An unexpected error occured. Changes were not saved.", ex);
+            }
+        }
+
+        public DbSet<TEntity> Set<TEntity>() where TEntity : class
+        {
+            return _context.Set<TEntity>();
+        }
+
+        public void Dispose()
+        {
+            _context?.Dispose();
         }
     }
 }
