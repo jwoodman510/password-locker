@@ -1,10 +1,15 @@
-﻿using Microsoft.AspNet.Identity.EntityFramework;
+﻿using System.Collections.Generic;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace Ksu.DataAccess
 {
     public partial class AspNetUser : IdentityUser
     {
-
+        private ICollection<AspNetRole> _aspNetRoles;
+        private ICollection<Company> _companies;
+        private ICollection<Department> _departments;
+        private ICollection<AspNetUserClaim> _aspNetUserClaims;
+        private ICollection<AspNetUserLogin> _aspNetUserLogins;
     }
 
     public partial class Entities

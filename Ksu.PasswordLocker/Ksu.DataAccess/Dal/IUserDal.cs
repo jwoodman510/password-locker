@@ -8,8 +8,9 @@ namespace Ksu.DataAccess.Dal
     {
         AspNetUser Get(string id);
         AspNetUser GetByEmail(string email);
-        IEnumerable<AspNetUser> GetByCompany(int companyId); 
-        
+        IEnumerable<AspNetUser> GetByCompany(int companyId);
+
+        AspNetRole GetRole(string id);
         void AddToRole(string id, string roleId);
     }
 
@@ -40,6 +41,13 @@ namespace Ksu.DataAccess.Dal
             return _context.Users
                 .AsNoTracking()
                 .Where(u => u.Companies.Any(c => c.CompanyId == companyId));
+        }
+
+        public AspNetRole GetRole(string id)
+        {
+            var user = _context.Users.Find(id);
+
+            return user.AspNetRoles?.FirstOrDefault();
         }
 
         public void AddToRole(string id, string roleId)

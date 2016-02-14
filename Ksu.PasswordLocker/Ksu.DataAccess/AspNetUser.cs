@@ -17,22 +17,47 @@ namespace Ksu.DataAccess
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public AspNetUser()
         {
-            this.AspNetRoles = new HashSet<AspNetRole>();
-            this.Companies = new HashSet<Company>();
-            this.Departments = new HashSet<Department>();
-            this.AspNetUserClaims = new HashSet<AspNetUserClaim>();
-            this.AspNetUserLogins = new HashSet<AspNetUserLogin>();
+            this._aspNetRoles = new HashSet<AspNetRole>();
+            this._companies = new HashSet<Company>();
+            this._departments = new HashSet<Department>();
+            this._aspNetUserClaims = new HashSet<AspNetUserClaim>();
+            this._aspNetUserLogins = new HashSet<AspNetUserLogin>();
         }
-    
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage",
+            "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<AspNetRole> AspNetRoles
+        {
+            get { return _aspNetRoles; }
+            set { _aspNetRoles = value; }
+        }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public ICollection<AspNetRole> AspNetRoles { get; set; }
+        public virtual ICollection<Company> Companies
+        {
+            get { return _companies; }
+            set { _companies = value; }
+        }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public ICollection<Company> Companies { get; set; }
+        public virtual ICollection<Department> Departments
+        {
+            get { return _departments; }
+            set { _departments = value; }
+        }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public ICollection<Department> Departments { get; set; }
+        public virtual ICollection<AspNetUserClaim> AspNetUserClaims
+        {
+            get { return _aspNetUserClaims; }
+            set { _aspNetUserClaims = value; }
+        }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public ICollection<AspNetUserClaim> AspNetUserClaims { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public ICollection<AspNetUserLogin> AspNetUserLogins { get; set; }
+        public virtual ICollection<AspNetUserLogin> AspNetUserLogins
+        {
+            get { return _aspNetUserLogins; }
+            set { _aspNetUserLogins = value; }
+        }
     }
 }
