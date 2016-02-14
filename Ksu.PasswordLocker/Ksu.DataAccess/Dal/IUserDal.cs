@@ -4,14 +4,12 @@ using System.Linq;
 
 namespace Ksu.DataAccess.Dal
 {
-    public interface IUserDal
+    public interface IUserDal : IDisposable
     {
         AspNetUser Get(string id);
         AspNetUser GetByEmail(string email);
-
-        IEnumerable<AspNetRole> GetRoles(string id);
-        IEnumerable<AspNetUserClaim> GetClaims(string id); 
-
+        IEnumerable<AspNetUser> GetByCompany(int companyId); 
+        
         void AddToRole(string id, string roleId);
     }
 
@@ -37,14 +35,11 @@ namespace Ksu.DataAccess.Dal
                 .FirstOrDefault(u => u.Email.Equals(email, StringComparison.CurrentCultureIgnoreCase));
         }
 
-        public IEnumerable<AspNetRole> GetRoles(string id)
+        public IEnumerable<AspNetUser> GetByCompany(int companyId)
         {
-            return _context.Users.Find(id).AspNetRoles;
-        }
-
-        public IEnumerable<AspNetUserClaim> GetClaims(string id)
-        {
-            return _context.Users.Find(id).AspNetUserClaims;
+            return _context.Users
+                .AsNoTracking()
+                .Where(u => u.Companies.Any(c => c.CompanyId == companyId));
         }
 
         public void AddToRole(string id, string roleId)
@@ -60,6 +55,11 @@ namespace Ksu.DataAccess.Dal
             role.AspNetUsers.Add(user);
 
             _context.SaveChanges();
+        }
+
+        public void Dispose()
+        {
+            _context?.Dispose();
         }
     }
 }

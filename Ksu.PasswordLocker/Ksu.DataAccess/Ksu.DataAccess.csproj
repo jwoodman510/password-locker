@@ -111,8 +111,9 @@
       <DependentUpon>Entities.tt</DependentUpon>
     </Compile>
     <Compile Include="Dal\ICompanyDal.cs" />
+    <Compile Include="Dal\IServerLoginDal.cs" />
     <Compile Include="Dal\IUserDal.cs" />
-    <Compile Include="Dal\UserStore.cs" />
+    <Compile Include="Dal\IUserStore.cs" />
     <Compile Include="DataAccessRegistry.cs" />
     <Compile Include="Department.cs">
       <DependentUpon>Entities.tt</DependentUpon>
