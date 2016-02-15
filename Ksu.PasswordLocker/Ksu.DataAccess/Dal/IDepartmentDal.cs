@@ -12,6 +12,8 @@ namespace Ksu.DataAccess.Dal
     {
         Department Get(int id);
 
+        Department GetByName(string name, int companyId);
+
         IEnumerable<Department> GetByCompany(int companyId);
 
         IEnumerable<Department> GetByUser(string userId);
@@ -40,6 +42,16 @@ namespace Ksu.DataAccess.Dal
                 .AsNoTracking()
                 .AsQueryable()
                 .FirstOrDefault(d => d.DepartmentId == id);
+        }
+
+        public Department GetByName(string name, int companyId)
+        {
+            return _context.Departments
+                .AsNoTracking()
+                .AsQueryable()
+                .FirstOrDefault(d =>
+                    d.CompanyId == companyId &&
+                    d.DepartmentName.Equals(name, StringComparison.InvariantCultureIgnoreCase));
         }
 
         public IEnumerable<Department> GetByCompany(int companyId)

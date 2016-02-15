@@ -1,0 +1,11 @@
+﻿namespace Ksu.Global.Constants
+{
+    public static class Permissions
+    {
+        public static bool CanAddDepartment(string roleId)
+        {
+            return roleId == Roles.SysAdmin.Id
+                || roleId == Roles.CompanyAdmin.Id;
+        }
+    }
+}
