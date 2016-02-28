@@ -23,22 +23,27 @@ namespace Ksu.PasswordLocker
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            AddDepartment.Visible = false;
-            AddServer.Visible = false;
-
             if (string.IsNullOrEmpty(Context.User?.Identity?.Name))
                 return;
 
             var userId = Context.User.Identity.GetUserId();
             var user = _userCache.Get(userId);
 
-            AddDepartment.Visible = Permissions.CanAddDepartment(user?.RoleId);
-            AddServer.Visible = Permissions.CanAddDepartment(user?.RoleId);
-            AddUser.Visible = Permissions.CanAddUser(user?.RoleId);
+            SetRoleVisibility(user);
 
             RoleName.Text = user?.RoleId?.Length > 0
                 ? $"{user.CompanyName ?? "Logged In As"}: {Roles.GetName(user.RoleId)}"
                 : string.Empty;
+        }
+
+        private void SetRoleVisibility(CachedUser user)
+        {
+            AddDepartment.Visible = Permissions.CanAddDepartment(user?.RoleId);
+            AddServer.Visible = Permissions.CanAddDepartment(user?.RoleId);
+            AddUser.Visible = Permissions.CanAddUser(user?.RoleId);
+            ManageDepartments.Visible = Permissions.CanManageDepartments(user?.RoleId);
+            ManageServers.Visible = Permissions.CanManageServers(user?.RoleId);
+            ManageUsers.Visible = Permissions.CanManageUsers(user?.RoleId);
         }
 
         protected void addDepartmentSave_OnClick(object sender, EventArgs e)

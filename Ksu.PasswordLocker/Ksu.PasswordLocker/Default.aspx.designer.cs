@@ -49,6 +49,33 @@ namespace Ksu.PasswordLocker {
         protected global::System.Web.UI.WebControls.Label RoleName;
         
         /// <summary>
+        /// ManageDepartments control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlButton ManageDepartments;
+        
+        /// <summary>
+        /// ManageServers control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlButton ManageServers;
+        
+        /// <summary>
+        /// ManageUsers control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlButton ManageUsers;
+        
+        /// <summary>
         /// AddDepartmentPopupExtender control.
         /// </summary>
         /// <remarks>

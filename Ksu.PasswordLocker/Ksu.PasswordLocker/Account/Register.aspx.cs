@@ -22,20 +22,16 @@ namespace Ksu.PasswordLocker.Account
         {
             var company = _companyDal.Get(Company.Text);
 
-            if (company == null)
+            if (company != null)
             {
-                ErrorMessage.Text = "Company not found.";
+                ErrorMessage.Text = "Company already exists.";
                 return;
             }
 
-            if (!string.IsNullOrEmpty(company.Domain))
+            var addedCompany = _companyDal.Create(new Company
             {
-                if (!Email.Text.EndsWith(company.Domain))
-                {
-                    ErrorMessage.Text = $"Unauthorized company email. Must include the domain: {company.Domain}.";
-                    return;
-                }
-            }
+                CompanyName = Company.Text
+            });
 
             var manager = Context.GetOwinContext().GetUserManager<ApplicationUserManager>();
             var signInManager = Context.GetOwinContext().Get<ApplicationSignInManager>();
@@ -43,7 +39,7 @@ namespace Ksu.PasswordLocker.Account
             var result = manager.Create(user, Password.Text);
             if (result.Succeeded)
             {
-                AddRoleAndCompany(user, company.CompanyId);
+                AddRoleAndCompany(user, addedCompany.CompanyId);
                 signInManager.SignIn(user, false, false);
                 IdentityHelper.RedirectToReturnUrl(Request.QueryString["ReturnUrl"], Response);
             }
@@ -52,10 +48,10 @@ namespace Ksu.PasswordLocker.Account
                 ErrorMessage.Text = result.Errors.FirstOrDefault();
             }
         }
-
+        
         private void AddRoleAndCompany(AspNetUser user, int companyId)
         {
-            _userDal.AddToRole(user.Id, Roles.CompanyUser.Id);
+            _userDal.AddToRole(user.Id, Roles.CompanyAdmin.Id);
             _companyDal.AddUser(companyId, user.Id);
         }
     }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Ksu.DataAccess.Exception;
 
 namespace Ksu.DataAccess.Dal
 {
@@ -10,6 +11,7 @@ namespace Ksu.DataAccess.Dal
         Company Get(int id);
 
         void AddUser(int id, string userId);
+        Company Create(Company company);
     }
 
     public class CompanyDal : ICompanyDal
@@ -43,6 +45,34 @@ namespace Ksu.DataAccess.Dal
             company.AspNetUsers.Add(user);
 
             _context.SaveChanges();
+        }
+
+        public Company Create(Company company)
+        {
+            if (company == null)
+                throw new ArgumentNullException(nameof(company));
+
+            if (string.IsNullOrEmpty(company.CompanyName))
+                throw new ValidationException("Company name cannot be empty.");
+
+            if(company.CompanyName.Length > 200)
+                throw new ValidationException("Company name cannot exceed 200 characters.");
+
+            var existing = Get(company.CompanyName);
+
+            if (existing != null)
+                throw new ValidationException("Company with same name already exists.");
+
+            var result = new Company
+            {
+                CompanyName = company.CompanyName
+            };
+
+            _context.Companies.Add(result);
+
+            _context.SaveChanges();
+
+            return result;
         }
 
         public void Dispose()

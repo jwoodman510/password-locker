@@ -16,6 +16,20 @@
         </button>
         <asp:Label runat="server" style="float: right; padding-right: 5px;" ID="RoleName" Font-Bold="True">Logged in as: Anonymous User</asp:Label>
     </div>
+    <div style="padding-top: 10px;">
+        <button runat="server" ID="ManageDepartments" class="btn btn-mini" Visible="False">
+            <i class="fa fa-exchange"></i>
+            <span>Departments</span>
+        </button>
+        <button runat="server" ID="ManageServers" class="btn btn-mini" Visible="False">
+            <i class="fa fa-exchange"></i>
+            <span>Servers</span>
+        </button>
+        <button runat="server" ID="ManageUsers" class="btn btn-mini" Visible="False">
+            <i class="fa fa-exchange"></i>
+            <span>Users</span>
+        </button>
+    </div>
 
     <div class="jumbotron">
         <h1 class="fa fa-exclamation-triangle">Sorry!</h1>
