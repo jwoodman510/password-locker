@@ -68,7 +68,7 @@ namespace Ksu.DataAccess.Dal
                 throw new ValidationException("Missing companyId");
 
             if (string.IsNullOrEmpty(server.ServerName))
-                throw new ValidationException("Server name too long.");
+                throw new ValidationException("Server name cannot be empty.");
 
             var existing = GetByCompany(server.CompanyId)
                 .FirstOrDefault(d => d.ServerName == server.ServerName);
