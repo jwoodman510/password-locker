@@ -8,7 +8,6 @@ using Ksu.Global.Constants;
 using Ksu.Model;
 using Ksu.PasswordLocker.Bootstrap;
 using Ksu.PasswordLocker.Identity;
-using Ksu.PasswordLocker.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 
@@ -158,13 +157,11 @@ namespace Ksu.PasswordLocker
             }
 
             var manager = Context.GetOwinContext().GetUserManager<ApplicationUserManager>();
-            //var signInManager = Context.GetOwinContext().Get<ApplicationSignInManager>();
             var newUser = new AspNetUser { UserName = UserEmailInput.Text, Email = UserEmailInput.Text };
             var result = manager.Create(newUser, UserPasswordInput.Text);
             if (result.Succeeded)
             {
                 AddRoleAndCompany(newUser, company.CompanyId);
-                //signInManager.SignIn(user, false, false);
                 ServErrorMessage.Text = string.Empty;
                 ServerNameInput.Text = string.Empty;
             }
