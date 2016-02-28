@@ -1,5 +1,6 @@
 ﻿using System;
-using Ksu.DataAccess;
+using System.Linq;
+using System.Web.UI.WebControls;
 using Ksu.DataAccess.Dal;
 using Ksu.Global.Constants;
 using Ksu.Model;
@@ -22,9 +23,13 @@ namespace Ksu.PasswordLocker.Manage
             if (!Permissions.CanManageDepartments(user?.RoleId))
                 Response.Redirect("~/Default.aspx");
 
-            AddDepartment.Visible = Permissions.CanAddDepartment(user?.RoleId);
-        }
+            AddDepartment.Visible = true;
+            DeptGrid.Visible = true;
 
+            if (!Page.IsPostBack)
+                RefreshGrid();
+        }
+        
         protected void addDepartmentSave_OnClick(object sender, EventArgs e)
         {
             var user = _userCache.Get(Context.User.Identity.GetUserId());
@@ -39,7 +44,7 @@ namespace Ksu.PasswordLocker.Manage
 
             try
             {
-                _departmentDal.Create(new Department
+                _departmentDal.Create(new DataAccess.Department
                 {
                     CompanyId = user.CompanyId,
                     DepartmentName = DepartmentNameInput.Text
@@ -47,13 +52,14 @@ namespace Ksu.PasswordLocker.Manage
             }
             catch (Exception)
             {
-                DepErrorMessage.Text = "Error Occured while creating department.";
+                DepErrorMessage.Text = "Error occured while creating department.";
                 AddDepartmentPopupExtender.Show();
             }
             finally
             {
                 DepErrorMessage.Text = string.Empty;
                 DepartmentNameInput.Text = string.Empty;
+                RefreshGrid();
             }
         }
 
@@ -69,6 +75,64 @@ namespace Ksu.PasswordLocker.Manage
                 return "Department with the same name already exists.";
 
             return string.Empty;
+        }
+
+        private void RefreshGrid()
+        {
+            var user = _userCache.Get(Context.User.Identity.GetUserId());
+
+            var depts = _departmentDal.GetByCompany(user.CompanyId)?.Select(d => new Department
+            {
+                DepartmentId = d.DepartmentId,
+                DepartmentName = d.DepartmentName
+            }).ToList();
+
+            DeptGrid.DataSource = string.IsNullOrEmpty(SearchText.Text)
+                ? depts
+                : depts.Where(d => d.DepartmentName.ToLower().Contains(SearchText.Text.ToLower())).ToList();
+
+            DeptGrid.DataBind();
+        }
+
+        protected void DeptGrid_OnRowDeleting(object sender, GridViewDeleteEventArgs e)
+        {
+            GridError.Text = string.Empty;
+            var row = DeptGrid.Rows[e.RowIndex];
+        }
+
+        protected void DeptGrid_OnRowUpdating(object sender, GridViewUpdateEventArgs e)
+        {
+            GridError.Text = string.Empty;
+            var row = DeptGrid.Rows[e.RowIndex];
+        }
+
+        protected void DeptGrid_OnRowEditing(object sender, GridViewEditEventArgs e)
+        {
+            GridError.Text = string.Empty;
+            DeptGrid.EditIndex = e.NewEditIndex;
+            RefreshGrid();
+        }
+
+        protected void DeptGrid_OnRowCancelingEdit(object sender, GridViewCancelEditEventArgs e)
+        {
+            DeptGrid.EditIndex = -1;
+            RefreshGrid();
+        }
+
+        protected void DeptGrid_OnRowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            if (e.CommandName == "ManageServers")
+            {
+                var index = Convert.ToInt32(e.CommandArgument);
+                var id = DeptGrid.DataKeys[index].Value;
+
+                Response.Redirect($"~/Manage/DepartmentServers.aspx?{QueryStringParameters.DepartmentId}={(int)id}");
+            }
+        }
+
+        protected void SearchTextButton_Click(object sender, EventArgs e)
+        {
+            RefreshGrid();
         }
     }
 }
