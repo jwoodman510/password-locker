@@ -7,5 +7,11 @@
             return roleId == Roles.SysAdmin.Id
                 || roleId == Roles.CompanyAdmin.Id;
         }
+
+        public static bool CanAddServer(string roleId)
+        {
+            return roleId == Roles.SysAdmin.Id
+                || roleId == Roles.CompanyAdmin.Id;
+        }
     }
 }

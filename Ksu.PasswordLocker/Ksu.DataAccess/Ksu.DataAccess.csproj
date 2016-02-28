@@ -117,6 +117,7 @@
     <Compile Include="Comparers\UserComparer.cs" />
     <Compile Include="Dal\ICompanyDal.cs" />
     <Compile Include="Dal\IDepartmentDal.cs" />
+    <Compile Include="Dal\IServerDal.cs" />
     <Compile Include="Dal\IServerLoginDal.cs" />
     <Compile Include="Dal\IUserDal.cs" />
     <Compile Include="Dal\IUserStore.cs" />

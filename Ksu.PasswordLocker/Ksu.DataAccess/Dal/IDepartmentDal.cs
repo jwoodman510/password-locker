@@ -85,7 +85,7 @@ namespace Ksu.DataAccess.Dal
                 .FirstOrDefault(d => d.DepartmentName == department.DepartmentName);
 
             if(existing != null)
-                throw new ValidationException("Department with name already exists.");
+                throw new ValidationException("Department with same name already exists.");
 
             var result = new Department
             {
@@ -148,9 +148,7 @@ namespace Ksu.DataAccess.Dal
             
             var added = currentLogins.Except(previousLogins, comparer).ToSafeList();
             var removed = previousLogins.Except(currentLogins, comparer).ToSafeList();
-
-            //todo: update
-
+            
             added.ForEach(u => _context.Entry(u).State = EntityState.Added);
             removed.ForEach(u => _context.Entry(u).State = EntityState.Deleted);
 
@@ -159,13 +157,13 @@ namespace Ksu.DataAccess.Dal
 
         private void UpdateServerMappings(Department current, Department previous)
         {
-            var previousDepartments = previous.Servers.ToSafeList();
-            var currentDepartments = current.Servers.ToSafeList();
+            var previousServers = previous.Servers.ToSafeList();
+            var currentServers = current.Servers.ToSafeList();
 
             var comparer = new ServerComparer(CompareSetting.CompareIds);
 
-            var added = currentDepartments.Except(previousDepartments, comparer).ToSafeList();
-            var removed = previousDepartments.Except(currentDepartments, comparer).ToSafeList();
+            var added = currentServers.Except(previousServers, comparer).ToSafeList();
+            var removed = previousServers.Except(currentServers, comparer).ToSafeList();
 
             added.ForEach(u => _context.Entry(u).State = EntityState.Added);
             removed.ForEach(u => _context.Entry(u).State = EntityState.Deleted);

@@ -22,6 +22,15 @@ namespace Ksu.PasswordLocker {
         protected global::System.Web.UI.HtmlControls.HtmlButton AddDepartment;
         
         /// <summary>
+        /// AddServer control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlButton AddServer;
+        
+        /// <summary>
         /// RoleName control.
         /// </summary>
         /// <remarks>
@@ -49,13 +58,13 @@ namespace Ksu.PasswordLocker {
         protected global::System.Web.UI.WebControls.Panel DepartmentPanel;
         
         /// <summary>
-        /// DepPoupupHeader control.
+        /// DepPopupHeader control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label DepPoupupHeader;
+        protected global::System.Web.UI.WebControls.Label DepPopupHeader;
         
         /// <summary>
         /// DepErrorMessage control.
@@ -83,5 +92,59 @@ namespace Ksu.PasswordLocker {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button addDepartmentSave;
+        
+        /// <summary>
+        /// AddServerPopupExtender control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.ModalPopupExtender AddServerPopupExtender;
+        
+        /// <summary>
+        /// ServerPanel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel ServerPanel;
+        
+        /// <summary>
+        /// ServPopupHeader control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label ServPopupHeader;
+        
+        /// <summary>
+        /// ServErrorMessage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal ServErrorMessage;
+        
+        /// <summary>
+        /// ServerNameInput control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox ServerNameInput;
+        
+        /// <summary>
+        /// addServerSave control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button addServerSave;
     }
 }
