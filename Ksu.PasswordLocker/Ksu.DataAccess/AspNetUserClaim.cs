@@ -9,6 +9,9 @@
 
 namespace Ksu.DataAccess
 {
+    using System;
+    using System.Collections.Generic;
+    
     public partial class AspNetUserClaim
     {
         public virtual AspNetUser AspNetUser { get; set; }

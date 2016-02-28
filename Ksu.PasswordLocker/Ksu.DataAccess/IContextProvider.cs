@@ -18,6 +18,12 @@ namespace Ksu.DataAccess
 
         DbSet<AspNetUserClaim> Claims { get; set; }
 
+        DbSet<Department> Departments { get; set; }
+
+        DbSet<Server> Servers { get; set; }
+
+        DbSet<ServerLogin> ServerLogins { get; set; }
+
         DbEntityEntry<TEntity> Entry<TEntity>(TEntity entity) where TEntity : class;
 
         void SetEntryState<T>(T entity, EntityState state) where T : class;
@@ -66,6 +72,24 @@ namespace Ksu.DataAccess
         {
             get { return _context.AspNetUserClaims; }
             set { _context.AspNetUserClaims = value; }
+        }
+
+        public DbSet<Department> Departments
+        {
+            get { return _context.Departments; }
+            set { _context.Departments = value; }
+        }
+
+        public DbSet<Server> Servers
+        {
+            get { return _context.Servers; }
+            set { _context.Servers = value; }
+        }
+
+        public DbSet<ServerLogin> ServerLogins
+        {
+            get { return _context.ServerLogins; }
+            set { _context.ServerLogins = value; }
         }
 
         public DbEntityEntry<TEntity> Entry<TEntity>(TEntity entity) where TEntity : class

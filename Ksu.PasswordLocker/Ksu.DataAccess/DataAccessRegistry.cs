@@ -11,6 +11,9 @@ namespace Ksu.DataAccess
             For<ICompanyDal>().Use<CompanyDal>();
             For<IUserDal>().Use<UserDal>();
             For<IUserStore>().Use<UserStore>();
+            For<IServerLoginDal>().Use<ServerLoginDal>();
+            For<IDepartmentDal>().Use<DepartmentDal>();
+            For<IServerDal>().Use<ServerDal>();
         }
     }
 }

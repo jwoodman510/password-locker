@@ -55,7 +55,7 @@ namespace Ksu.PasswordLocker.Account
 
         private void AddRoleAndCompany(AspNetUser user, int companyId)
         {
-            _userDal.AddToRole(user.Id, Roles.SysAdmin);
+            _userDal.AddToRole(user.Id, Roles.CompanyUser.Id);
             _companyDal.AddUser(companyId, user.Id);
         }
     }

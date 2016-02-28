@@ -22,6 +22,7 @@
         <EntityTypeShape EntityType="PM_SQLModel.AspNetUserLogin" Width="1.5" PointX="7.5" PointY="8.25" />
         <AssociationConnector Association="PM_SQLModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" />
         <AssociationConnector Association="PM_SQLModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" />
+        <AssociationConnector Association="PM_SQLModel.DepartmentsServers" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

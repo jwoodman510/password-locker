@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Ksu.DataAccess.Dal
 {
-    public interface ICompanyDal
+    public interface ICompanyDal : IDisposable
     {
         Company Get(string name);
         Company Get(int id);
@@ -43,6 +43,11 @@ namespace Ksu.DataAccess.Dal
             company.AspNetUsers.Add(user);
 
             _context.SaveChanges();
+        }
+
+        public void Dispose()
+        {
+            _context?.Dispose();
         }
     }
 }

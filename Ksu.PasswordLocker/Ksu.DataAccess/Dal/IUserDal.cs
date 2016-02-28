@@ -4,14 +4,13 @@ using System.Linq;
 
 namespace Ksu.DataAccess.Dal
 {
-    public interface IUserDal
+    public interface IUserDal : IDisposable
     {
         AspNetUser Get(string id);
         AspNetUser GetByEmail(string email);
+        IEnumerable<AspNetUser> GetByCompany(int companyId);
 
-        IEnumerable<AspNetRole> GetRoles(string id);
-        IEnumerable<AspNetUserClaim> GetClaims(string id); 
-
+        AspNetRole GetRole(string id);
         void AddToRole(string id, string roleId);
     }
 
@@ -37,14 +36,18 @@ namespace Ksu.DataAccess.Dal
                 .FirstOrDefault(u => u.Email.Equals(email, StringComparison.CurrentCultureIgnoreCase));
         }
 
-        public IEnumerable<AspNetRole> GetRoles(string id)
+        public IEnumerable<AspNetUser> GetByCompany(int companyId)
         {
-            return _context.Users.Find(id).AspNetRoles;
+            return _context.Users
+                .AsNoTracking()
+                .Where(u => u.Companies.Any(c => c.CompanyId == companyId));
         }
 
-        public IEnumerable<AspNetUserClaim> GetClaims(string id)
+        public AspNetRole GetRole(string id)
         {
-            return _context.Users.Find(id).AspNetUserClaims;
+            var user = _context.Users.Find(id);
+
+            return user.AspNetRoles?.FirstOrDefault();
         }
 
         public void AddToRole(string id, string roleId)
@@ -60,6 +63,11 @@ namespace Ksu.DataAccess.Dal
             role.AspNetUsers.Add(user);
 
             _context.SaveChanges();
+        }
+
+        public void Dispose()
+        {
+            _context?.Dispose();
         }
     }
 }
