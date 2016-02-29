@@ -3,6 +3,7 @@ using System.Linq;
 using System.Web.UI.WebControls;
 using Ksu.DataAccess.Dal;
 using Ksu.Global.Constants;
+using Ksu.Global.Extensions;
 using Ksu.Model;
 using Ksu.PasswordLocker.Bootstrap;
 using Ksu.PasswordLocker.Identity;
@@ -85,7 +86,7 @@ namespace Ksu.PasswordLocker.Manage
             {
                 DepartmentId = d.DepartmentId,
                 DepartmentName = d.DepartmentName
-            }).ToList();
+            }).ToSafeList();
 
             DeptGrid.DataSource = string.IsNullOrEmpty(SearchText.Text)
                 ? depts
