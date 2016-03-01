@@ -20,9 +20,15 @@ namespace Ksu.DataAccess.Dal
 
         void Delete(int departmentId);
 
+        void Update(Department department);
+
         void AddServer(int departmentId, int serverId);
 
         void RemoveServer(int departmentId, int serverId);
+
+        void AddUser(int departmentId, string userId);
+
+        void RemoveUser(int departmentId, string userId);
     }
 
     public class DepartmentDal : IDepartmentDal
@@ -108,7 +114,6 @@ namespace Ksu.DataAccess.Dal
                 .Include("Servers")
                 .Include("AspNetUsers")
                 .Include("ServerLogins")
-                .Include("DepartmentId")
                 .First(d => d.DepartmentId == departmentId);
 
             if (existing == null)
@@ -122,6 +127,36 @@ namespace Ksu.DataAccess.Dal
             entry.State = EntityState.Deleted;
 
             _context.SaveChanges();
+        }
+
+        public void Update(Department department)
+        {
+            var previous = _context.Departments.Find(department.DepartmentId);
+
+            if(previous == null)
+                throw new NotFoundException("Department not found.");
+
+            if (string.IsNullOrWhiteSpace(department.DepartmentName))
+                throw new ValidationException("Department name not specified.");
+
+            if (department.DepartmentName.Length > 200)
+                throw new ValidationException("Department name cannot exceed 200 characters.");
+
+            var duplicate = _context.Departments
+                .AsNoTracking()
+                .Where(d => d.CompanyId == department.CompanyId)
+                .FirstOrDefault(d => d.DepartmentName.ToLower().Equals(department.DepartmentName));
+
+            if (duplicate != null)
+                throw new ValidationException("Department with same name already exists.");
+
+            var entry = _context.Entry(previous);
+
+            entry.Entity.DepartmentName = department.DepartmentName;
+
+            _context.SaveChanges();
+
+            _context.Entry(previous).State = EntityState.Detached;
         }
 
         public void AddServer(int departmentId, int serverId)
@@ -158,6 +193,44 @@ namespace Ksu.DataAccess.Dal
                 return;
 
             department.Servers.Remove(found);
+
+            _context.SaveChanges();
+        }
+
+        public void AddUser(int departmentId, string userId)
+        {
+            var department = _context.Departments
+                   .Include("AspNetUsers")
+                   .First(d => d.DepartmentId == departmentId);
+
+            var user = _context.Users.Find(userId);
+
+            if (user == null)
+                throw new NotFoundException("User not found.");
+
+            if (user.Companies.All(c => c.CompanyId != department.CompanyId))
+                throw new ValidationException("Invalid company user.");
+
+            if (department.AspNetUsers == null)
+                department.AspNetUsers = new List<AspNetUser>();
+
+            department.AspNetUsers.Add(user);
+
+            _context.SaveChanges();
+        }
+
+        public void RemoveUser(int departmentId, string userId)
+        {
+            var department = _context.Departments
+                   .Include("AspNetUsers")
+                   .First(d => d.DepartmentId == departmentId);
+
+            var found = department.AspNetUsers?.FirstOrDefault(u => u.Id.Equals(userId));
+
+            if (found == null)
+                return;
+
+            department.AspNetUsers.Remove(found);
 
             _context.SaveChanges();
         }

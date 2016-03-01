@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="DepartmentServers.aspx.cs" Inherits="Ksu.PasswordLocker.Manage.DepartmentServers" %>
+﻿<%@ Page Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="DepartmentUsers.aspx.cs" Inherits="Ksu.PasswordLocker.Manage.DepartmentUsers" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
     <div class="row">
@@ -8,12 +8,12 @@
         <div class="col-lg-5 col-md-5 col-sm-6 col-sm-6">
             <asp:Panel runat="server" DefaultButton="AllSearchTextButton">
                 <asp:TextBox ID="AllSearchText" runat="server" CssClass="modalTextInput"></asp:TextBox>
-                <asp:Button ID="AllSearchTextButton" runat="server" Text="Search" style="display:none;" OnClick="AllSearchTextButton_Click" />
+                <asp:Button ID="AllSearchTextButton" runat="server" Text="Search" style="display:none;" OnClick="AllSearchTextButton_OnClick" />
             </asp:Panel>
             <div style="padding-top: 20px;">
                 <asp:GridView runat="server" ID="AllGrid"
                     AutoGenerateColumns="False"
-                    DataKeyNames="ServerId"
+                    DataKeyNames="Id"
                     BackColor="White"
                     BorderColor="#999999"
                     BorderStyle="Solid"
@@ -25,8 +25,8 @@
                     OnRowCommand="AllGrid_OnRowCommand">
                     <AlternatingRowStyle BackColor="#CCCCCC" />
                     <Columns>
-                        <asp:BoundField DataField="ServerName" HeaderText="Server" />
-                        <asp:ButtonField HeaderText="" Text="Add"  CommandName="AddServer">
+                        <asp:BoundField DataField="UserName" HeaderText="Email" />
+                        <asp:ButtonField HeaderText="" Text="Add"  CommandName="AddUser">
                         <ItemStyle Font-Underline="True" />
                         </asp:ButtonField>
                     </Columns>
@@ -45,12 +45,12 @@
         <div class="col-lg-5 col-md-5 col-sm-6 col-xs-6">
             <asp:Panel runat="server" DefaultButton="AddedSearchTextButton">
                 <asp:TextBox ID="AddedSearchText" runat="server" CssClass="modalTextInput"></asp:TextBox>
-                <asp:Button ID="AddedSearchTextButton" runat="server" Text="Search" style="display:none;" OnClick="AddedSearchTextButton_Click" />
+                <asp:Button ID="AddedSearchTextButton" runat="server" Text="Search" style="display:none;" OnClick="AddedSearchTextButton_OnClick" />
             </asp:Panel>
             <div style="padding-top: 20px;">
                 <asp:GridView runat="server" ID="AddedGrid"
                     AutoGenerateColumns="false"
-                    DataKeyNames="ServerId"
+                    DataKeyNames="Id"
                     BackColor="White"
                     BorderColor="#999999"
                     BorderStyle="Solid"
@@ -58,10 +58,11 @@
                     CellPadding="3"
                     ForeColor="Black"
                     GridLines="Vertical"
-                    OnRowDeleting="AddedGrid_RowDeleting" Width="302px">
+                    OnRowDeleting="AddedGrid_OnRowDeleting"
+                    Width="302px">
                     <AlternatingRowStyle BackColor="#CCCCCC" />
                     <Columns>
-                        <asp:BoundField DataField="ServerName" HeaderText="Server" />
+                        <asp:BoundField DataField="UserName" HeaderText="Email" />
                         <asp:CommandField ShowDeleteButton="True" />
                     </Columns>
                     <FooterStyle BackColor="#CCCCCC" />

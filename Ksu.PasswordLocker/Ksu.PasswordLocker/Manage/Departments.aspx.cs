@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Web.UI.WebControls;
+using Ksu.DataAccess;
 using Ksu.DataAccess.Dal;
+using Ksu.DataAccess.Exception;
 using Ksu.Global.Constants;
 using Ksu.Global.Extensions;
 using Ksu.Model;
@@ -82,11 +84,7 @@ namespace Ksu.PasswordLocker.Manage
         {
             var user = _userCache.Get(Context.User.Identity.GetUserId());
 
-            var depts = _departmentDal.GetByCompany(user.CompanyId)?.Select(d => new Department
-            {
-                DepartmentId = d.DepartmentId,
-                DepartmentName = d.DepartmentName
-            }).ToSafeList();
+            var depts = _departmentDal.GetByCompany(user.CompanyId).ToSafeList();
 
             DeptGrid.DataSource = string.IsNullOrEmpty(SearchText.Text)
                 ? depts
@@ -98,13 +96,66 @@ namespace Ksu.PasswordLocker.Manage
         protected void DeptGrid_OnRowDeleting(object sender, GridViewDeleteEventArgs e)
         {
             GridError.Text = string.Empty;
-            var row = DeptGrid.Rows[e.RowIndex];
+
+            var id = DeptGrid?.DataKeys[e.RowIndex]?.Value;
+
+            if (id == null)
+                return;
+
+            try
+            {
+                _departmentDal.Delete((int) id);
+                RefreshGrid();
+            }
+            catch (Exception)
+            {
+                GridError.Text = "An error occured while deleting the department.";
+            }
         }
 
         protected void DeptGrid_OnRowUpdating(object sender, GridViewUpdateEventArgs e)
         {
             GridError.Text = string.Empty;
-            var row = DeptGrid.Rows[e.RowIndex];
+
+            var id = DeptGrid?.DataKeys[e.RowIndex]?.Value;
+
+            if (id == null)
+                return;
+            
+            var newName = e.NewValues["DepartmentName"].ToString();
+
+            var dept = _departmentDal.Get((int) id);
+
+            if (dept.DepartmentName == newName)
+            {
+                DeptGrid.EditIndex = -1;
+                return;
+            }
+
+            dept.DepartmentName = newName;
+
+            try
+            {
+                _departmentDal.Update(dept);
+            }
+            catch (ValidationException ex)
+            {
+                GridError.Text = ex.Message;
+            }
+            catch (NotFoundException ex)
+            {
+                GridError.Text = ex.Message;
+
+            }
+            catch (Exception)
+            {
+                GridError.Text = "An error occured while updating the department.";
+            }
+            finally
+            {
+                DeptGrid.EditIndex = -1;
+                RefreshGrid();
+            }
         }
 
         protected void DeptGrid_OnRowEditing(object sender, GridViewEditEventArgs e)
@@ -122,13 +173,18 @@ namespace Ksu.PasswordLocker.Manage
 
         protected void DeptGrid_OnRowCommand(object sender, GridViewCommandEventArgs e)
         {
-            if (e.CommandName == "ManageServers")
-            {
-                var index = Convert.ToInt32(e.CommandArgument);
-                var id = DeptGrid.DataKeys[index].Value;
+            var index = Convert.ToInt32(e.CommandArgument);
+            var id = DeptGrid?.DataKeys[index]?.Value;
 
-                Response.Redirect($"~/Manage/DepartmentServers.aspx?{QueryStringParameters.DepartmentId}={(int)id}");
-            }
+            if (id == null)
+                return;
+
+            var departmentId = (int) id;
+
+            if (e.CommandName == "ManageServers")
+                Response.Redirect($"~/Manage/DepartmentServers.aspx?{QueryStringParameters.DepartmentId}={departmentId}");
+            else if(e.CommandName == "ManageUsers")
+                Response.Redirect($"~/Manage/DepartmentUsers.aspx?{QueryStringParameters.DepartmentId}={departmentId}");
         }
 
         protected void SearchTextButton_Click(object sender, EventArgs e)
