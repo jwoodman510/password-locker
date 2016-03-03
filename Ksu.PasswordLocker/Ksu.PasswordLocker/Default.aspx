@@ -25,8 +25,70 @@
             </button>
         </div>
     </div>
-    <div class="jumbotron">
-        <h1 class="fa fa-exclamation-triangle">Sorry!</h1>
-        <p class="lead">This page is currently under construction...</p>
+    <div class="row" style="padding-top: 10px;">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <h1>Server Logins</h1>
+        </div>
     </div>
+    <div class="row" style="padding-top: 10px;">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <button runat="server" ID="AddLogin" class="btn btn-mini">
+                    <i class="fa fa-plus-square"></i>
+                    <span>Create Login</span>
+            </button>
+        </div>
+    </div>
+    <%--Add Login Modal--%>
+    <ajaxToolkit:ModalPopupExtender ID="AddLoginPopupExtender"
+        runat="server"
+        TargetControlID="AddLogin" 
+        PopupControlID="LoginPanel"
+        PopupDragHandleControlID="LoginPopupHeader"
+        Drag="True"
+        BackgroundCssClass="modalBackground"
+        BehaviorID="AddLoginModal">
+    </ajaxToolkit:ModalPopupExtender>
+    <asp:Panel runat="server" ID="LoginPanel" style="display: none; height: 375px; width: 650px;" CssClass="modalPopup">
+        <div style="text-align: center">
+            <asp:Label Font-Bold="True" runat="server" ID="LoginPopupHeader">Create Login</asp:Label>
+            <i class="fa fa-times-circle" style="float: right; cursor: pointer;" onclick="closeUserModal()"></i>
+        </div>
+        <hr />
+        <div>
+            <asp:Label runat="server" Font-Bold="True">Server:</asp:Label>
+            <asp:DropDownList runat="server" ID="ServerDropDown"></asp:DropDownList>
+            <asp:Label runat="server" Font-Bold="True" style="padding-left: 10px;">Department:</asp:Label>
+            <asp:DropDownList runat="server" ID="DepartmentDropDown"></asp:DropDownList>
+        </div>
+        <hr />
+        <div style="text-align: right; padding-top: 20px;">
+            <asp:Label AssociatedControlID="UserNameInput" runat="server" CssClass="control-label" style="float: left;">User Name:</asp:Label>
+            <span id="useNameInput"><asp:TextBox runat="server" ID="UserNameInput" MaxLength="200" style="max-width: 400px; width: 400px;"></asp:TextBox></span>
+        </div>
+        <div style="text-align: right; padding-top: 10px;">
+            <asp:Label AssociatedControlID="UserPasswordInput" runat="server" CssClass="control-label" style="float: left;">Password:</asp:Label>
+            <span id="useNamePasswordInput"><asp:TextBox runat="server" TextMode="Password" ID="UserPasswordInput" MaxLength="200" style="max-width: 400px; width: 400px;"></asp:TextBox></span>
+        </div>
+        <div style="text-align: right; padding-top: 10px;">
+            <asp:Label AssociatedControlID="UserConfirmInput" runat="server" CssClass="control-label" style="float: left;">Confirm Password:</asp:Label>
+            <span id="useNameConfirmInput"><asp:TextBox runat="server" TextMode="Password" ID="UserConfirmInput" MaxLength="200" style="max-width: 400px; width: 400px;"></asp:TextBox></span>
+        </div>
+        <br/>
+        <hr />
+        <div class="Controls" style="text-align: right">
+            <asp:Button runat="server" ID="addLoginSave" Text="Save" OnClick="addLoginSave_OnClick"/>
+        </div>
+        <div class="text-danger">
+            <span id="userNameError"><asp:Literal runat="server" ID="LoginErrorMessage"/></span>
+        </div>
+    </asp:Panel>
+    <script type="text/javascript">
+        function closeUserModal() {
+            document.getElementById('userNameError').innerText = "";
+            document.getElementById('useNameInput').firstChild.value = "";
+            document.getElementById('useNamePasswordInput').firstChild.value = "";
+            document.getElementById('useNameConfirmInput').firstChild.value = "";
+            $find('AddLoginModal').hide();
+        }
+    </script>
 </asp:Content>
