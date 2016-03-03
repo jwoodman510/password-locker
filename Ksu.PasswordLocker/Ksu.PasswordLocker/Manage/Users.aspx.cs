@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Linq;
 using System.Web;
+using System.Web.UI.WebControls;
 using Ksu.DataAccess;
 using Ksu.DataAccess.Dal;
 using Ksu.Global.Constants;
+using Ksu.Global.Extensions;
 using Ksu.Model;
 using Ksu.PasswordLocker.Bootstrap;
 using Ksu.PasswordLocker.Identity;
@@ -26,7 +28,11 @@ namespace Ksu.PasswordLocker.Manage
             if(!Permissions.CanManageUsers(user?.RoleId))
                 Response.Redirect("~/Default.aspx");
 
-            AddUser.Visible = Permissions.CanAddUser(user?.RoleId);
+            AddUser.Visible = true;
+            UserGrid.Visible = true;
+
+            if (!Page.IsPostBack)
+                RefreshGrid();
         }
         
         protected void addUserSave_OnClick(object sender, EventArgs e)
@@ -88,10 +94,68 @@ namespace Ksu.PasswordLocker.Manage
             return string.Empty;
         }
 
+        private void RefreshGrid()
+        {
+            var userId = Context.User.Identity.GetUserId();
+            var user = _userCache.Get(userId);
+
+            var users = _userDal.GetByCompany(user.CompanyId)
+                .Where(u => !u.Id.Equals(userId))
+                .ToSafeList();
+
+            UserGrid.DataSource = string.IsNullOrEmpty(SearchText.Text)
+                ? users
+                : users.Where(d => d.UserName.ToLower().Contains(SearchText.Text.ToLower())).ToList();
+
+            UserGrid.DataBind();
+        }
+
         private void AddRoleAndCompany(AspNetUser user, int companyId)
         {
             _userDal.AddToRole(user.Id, Roles.CompanyUser.Id);
             _companyDal.AddUser(companyId, user.Id);
+        }
+
+        protected void SearchTextButton_OnClick(object sender, EventArgs e)
+        {
+            RefreshGrid();
+        }
+
+        protected void UserGrid_OnRowDeleting(object sender, GridViewDeleteEventArgs e)
+        {
+            GridError.Text = string.Empty;
+
+            var id = UserGrid?.DataKeys[e.RowIndex]?.Value;
+
+            if (id == null)
+                return;
+
+            var userId = id.ToString();
+            
+            try
+            {
+                _userDal.Delete(userId);
+                _userCache.Remove(userId);
+                RefreshGrid();
+            }
+            catch (Exception)
+            {
+                GridError.Text = "An error occured while deleting the user.";
+            }
+        }
+
+        protected void UserGrid_OnRowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            var index = Convert.ToInt32(e.CommandArgument);
+            var id = UserGrid?.DataKeys[index]?.Value;
+
+            if (id == null)
+                return;
+            
+            var userId = id.ToString();
+
+            if (e.CommandName == "ManageDepartments")
+                Response.Redirect($"~/Manage/UserDepartments.aspx?{QueryStringParameters.UserId}={userId}");
         }
     }
 }

@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using Ksu.DataAccess.Comparers;
 using Ksu.DataAccess.Exception;
-using Ksu.Global.Extensions;
 
 namespace Ksu.DataAccess.Dal
 {
@@ -18,6 +16,12 @@ namespace Ksu.DataAccess.Dal
         Server Create(Server server);
 
         void Delete(int id);
+
+        void Update(Server server);
+
+        void AddDepartment(int serverId, int departmentId);
+
+        void RemoveDepartment(int serverId, int departmentId);
     }
     
     public class ServerDal : IServerDal
@@ -91,54 +95,87 @@ namespace Ksu.DataAccess.Dal
 
         public void Delete(int id)
         {
-            var previous = Get(id);
+            var existing = _context.Servers
+                .Include("Departments")
+                .Include("ServerLogins")
+                .First(d => d.ServerId == id);
 
-            if (previous == null)
+            if (existing == null)
                 return;
 
-            var toDelete = new Server
-            {
-                ServerId = id
-            };
+            existing.Departments.Clear();
+            existing.ServerLogins.Clear();
 
-            UpdateServerLoginMappings(toDelete, previous);
-            UpdateDepartmentMappings(toDelete, previous);
-
-            var existing = _context.Departments.Find(id);
             var entry = _context.Entry(existing);
             entry.State = EntityState.Deleted;
 
             _context.SaveChanges();
         }
 
-        private void UpdateServerLoginMappings(Server current, Server previous)
+        public void Update(Server server)
         {
-            var previousLogins = previous.ServerLogins.ToSafeList();
-            var currentLogins = current.ServerLogins.ToSafeList();
+            var previous = _context.Servers.Find(server.ServerId);
 
-            var comparer = new ServerLoginComparer(CompareSetting.CompareIds);
+            if (previous == null)
+                throw new NotFoundException("Server not found.");
 
-            var added = currentLogins.Except(previousLogins, comparer).ToSafeList();
-            var removed = previousLogins.Except(currentLogins, comparer).ToSafeList();
-            
-            added.ForEach(u => _context.Entry(u).State = EntityState.Added);
-            removed.ForEach(u => _context.Entry(u).State = EntityState.Deleted);
+            if (string.IsNullOrWhiteSpace(server.ServerName))
+                throw new ValidationException("Server name not specified.");
+
+            if (server.ServerName.Length > 200)
+                throw new ValidationException("Server name cannot exceed 200 characters.");
+
+            var duplicate = _context.Servers
+                .AsNoTracking()
+                .Where(d => d.CompanyId == server.CompanyId)
+                .FirstOrDefault(d => d.ServerName.ToLower().Equals(server.ServerName));
+
+            if (duplicate != null)
+                throw new ValidationException("Server with same name already exists.");
+
+            var entry = _context.Entry(previous);
+
+            entry.Entity.ServerName = server.ServerName;
+
+            _context.SaveChanges();
+
+            _context.Entry(previous).State = EntityState.Detached;
+        }
+
+        public void AddDepartment(int serverId, int departmentId)
+        {
+            var server = _context.Servers
+                   .Include("Departments")
+                   .First(d => d.ServerId == serverId);
+
+            var department = _context.Departments.Find(departmentId);
+
+            if (server == null)
+                throw new NotFoundException("Department not found.");
+
+            if (server.CompanyId != department.CompanyId)
+                throw new ValidationException("Invalid company department.");
+
+            if (server.Departments == null)
+                server.Departments = new List<Department>();
+
+            server.Departments.Add(department);
 
             _context.SaveChanges();
         }
 
-        private void UpdateDepartmentMappings(Server current, Server previous)
+        public void RemoveDepartment(int serverId, int departmentId)
         {
-            var previousDepartments = previous.Departments.ToSafeList();
-            var currentDepartments = current.Departments.ToSafeList();
+            var server = _context.Servers
+                   .Include("Departments")
+                   .First(d => d.ServerId == serverId);
 
-            var comparer = new DepartmentComparer(CompareSetting.CompareIds);
+            var found = server.Departments?.FirstOrDefault(s => s.DepartmentId == departmentId);
 
-            var added = currentDepartments.Except(previousDepartments, comparer).ToSafeList();
-            var removed = previousDepartments.Except(currentDepartments, comparer).ToSafeList();
+            if (found == null)
+                return;
 
-            added.ForEach(u => _context.Entry(u).State = EntityState.Added);
-            removed.ForEach(u => _context.Entry(u).State = EntityState.Deleted);
+            server.Departments.Remove(found);
 
             _context.SaveChanges();
         }

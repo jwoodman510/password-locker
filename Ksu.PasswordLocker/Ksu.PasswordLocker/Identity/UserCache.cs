@@ -9,6 +9,7 @@ namespace Ksu.PasswordLocker.Identity
     {
         CachedUser Get(string id);
         string GetRoleId(string userId);
+        void Remove(string id);
     }
 
     public class UserCache : IUserCache
@@ -24,12 +25,22 @@ namespace Ksu.PasswordLocker.Identity
 
         public CachedUser Get(string id)
         {
-            return GetImpl(id);
+            return !string.IsNullOrWhiteSpace(id)
+                ? GetImpl(id)
+                : null;
         }
 
         public string GetRoleId(string userId)
         {
-            return GetImpl(userId)?.RoleId;
+            return !string.IsNullOrWhiteSpace(userId)
+                ? GetImpl(userId)?.RoleId
+                : null;
+        }
+
+        public void Remove(string id)
+        {
+            if(!string.IsNullOrWhiteSpace(id))
+                _cache.Delete(id);
         }
 
         private CachedUser GetImpl(string id)

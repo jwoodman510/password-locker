@@ -1,14 +1,56 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Servers.aspx.cs" Inherits="Ksu.PasswordLocker.Manage.Servers" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+    <h1>Servers</h1>
     <br/>
-    <div>
+    <div class="row">
         <button runat="server" ID="AddServer" class="btn btn-mini" Visible="False">
             <i class="fa fa-plus-square"></i>
             <span>Add Server</span>
         </button>
     </div>
-
+    <div class="row">
+    <asp:Panel runat="server" DefaultButton="SearchTextButton">
+        <asp:TextBox ID="SearchText" runat="server" style="float:right;" CssClass="modalTextInput"></asp:TextBox>
+        <asp:Button ID="SearchTextButton" runat="server" Text="Search" style="display:none;" OnClick="SearchTextButton_OnClick" />
+    </asp:Panel>
+    </div>
+    <div class="row text-danger"><h4><asp:Literal runat="server" ID="GridError"></asp:Literal></h4></div>
+    <div class="row" style="padding-top: 20px;">
+        <asp:GridView runat="server" ID="ServerGrid"
+            AutoGenerateColumns="False"
+            Visible="False"
+            DataKeyNames="ServerId"
+            Width="1258px"
+            BackColor="White"
+            BorderColor="#999999"
+            BorderStyle="Solid"
+            BorderWidth="1px"
+            CellPadding="3"
+            ForeColor="Black"
+            GridLines="Vertical"
+            OnRowDeleting="ServerGrid_OnRowDeleting"
+            OnRowUpdating="ServerGrid_OnRowUpdating"
+            OnRowEditing="ServerGrid_OnRowEditing"
+            OnRowCancelingEdit="ServerGrid_OnRowCancelingEdit"
+            OnRowCommand="ServerGrid_OnRowCommand">
+            <AlternatingRowStyle BackColor="#CCCCCC" />
+            <Columns>
+                <asp:BoundField DataField="ServerName" HeaderText="Name"/>
+                <asp:ButtonField ButtonType="Button" HeaderText="Departments" Text="Manage Departments" CommandName="ManageDepartments"/>
+                <asp:CommandField ShowEditButton="True" />
+                <asp:CommandField ShowDeleteButton="True" />
+            </Columns>
+            <FooterStyle BackColor="#CCCCCC" />
+            <HeaderStyle BackColor="Black" Font-Bold="True" ForeColor="White" />
+            <PagerStyle BackColor="#999999" ForeColor="Black" HorizontalAlign="Center" />
+            <SelectedRowStyle BackColor="#000099" Font-Bold="True" ForeColor="White" />
+            <SortedAscendingCellStyle BackColor="#F1F1F1" />
+            <SortedAscendingHeaderStyle BackColor="#808080" />
+            <SortedDescendingCellStyle BackColor="#CAC9C9" />
+            <SortedDescendingHeaderStyle BackColor="#383838" />
+        </asp:GridView>
+    </div>
     <%--Add Server Modal--%>
     <ajaxToolkit:ModalPopupExtender ID="AddServerPopupExtender"
         runat="server"
