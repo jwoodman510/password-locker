@@ -3,23 +3,25 @@
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
     <h1>Departments</h1>
     <br/>
-    <div>
+    <div class="row">
         <button runat="server" ID="AddDepartment" class="btn btn-mini" Visible="False">
             <i class="fa fa-plus-square"></i>
             <span>Add Department</span>
-        </button>     
-    </div>   
+        </button>
+    </div>
+    <div class="row" style="padding-top: 15px;">
     <asp:Panel runat="server" DefaultButton="SearchTextButton">
-        <asp:TextBox ID="SearchText" runat="server" style="float:right;" CssClass="modalTextInput"></asp:TextBox>
+        <asp:TextBox ID="SearchText" runat="server" CssClass="modalTextInput"></asp:TextBox>
         <asp:Button ID="SearchTextButton" runat="server" Text="Search" style="display:none;" OnClick="SearchTextButton_Click" />
     </asp:Panel>
-    <div class="text-danger"><h4><asp:Literal runat="server" ID="GridError"></asp:Literal></h4></div>
-    <div style="padding-top: 20px;">
+    </div>
+    <div class="row text-danger"><h4><asp:Literal runat="server" ID="GridError"></asp:Literal></h4></div>
+    <div class="row">
         <asp:GridView runat="server" ID="DeptGrid"
+            Width="600"
             AutoGenerateColumns="False"
             Visible="False"
             DataKeyNames="DepartmentId"
-            Width="1258px"
             BackColor="White"
             BorderColor="#999999"
             BorderStyle="Solid"
@@ -85,5 +87,4 @@
             $find('AddDepartmentModal').hide();
         }
     </script>
-    </div>
 </asp:Content>
