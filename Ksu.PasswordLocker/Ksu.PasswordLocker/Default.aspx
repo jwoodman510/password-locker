@@ -1,7 +1,7 @@
 ﻿<%@ Page Title="Home Page" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="Ksu.PasswordLocker._Default"%>
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
     <br/>
-    <div class="row" style="padding-top: 10px;">
+    <div class="row">
         <asp:Label runat="server" style="padding-left: 15px;" ID="RoleName" Font-Bold="True">Logged in as: Anonymous User</asp:Label>
     </div>
     <div class="row" style="padding-top: 10px;"></div>

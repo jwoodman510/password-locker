@@ -9,19 +9,19 @@
             <span>Add User</span>
         </button>
     </div>
-    <div class="row">
+    <div class="row" style="padding-top: 15px;">
     <asp:Panel runat="server" DefaultButton="SearchTextButton">
-        <asp:TextBox ID="SearchText" runat="server" style="float:right;" CssClass="modalTextInput"></asp:TextBox>
+        <asp:TextBox ID="SearchText" runat="server" CssClass="modalTextInput"></asp:TextBox>
         <asp:Button ID="SearchTextButton" runat="server" Text="Search" style="display:none;" OnClick="SearchTextButton_OnClick" />
     </asp:Panel>
     </div>
     <div class="row text-danger"><h4><asp:Literal runat="server" ID="GridError"></asp:Literal></h4></div>
-    <div class="row" style="padding-top: 20px;">
+    <div class="row">
         <asp:GridView runat="server" ID="UserGrid"
             AutoGenerateColumns="False"
             Visible="False"
             DataKeyNames="Id"
-            Width="1258px"
+            Width="600"
             BackColor="White"
             BorderColor="#999999"
             BorderStyle="Solid"
