@@ -55,10 +55,6 @@ namespace Ksu.PasswordLocker
             ManageDepartments.Visible = Permissions.CanManageDepartments(user?.RoleId);
             ManageServers.Visible = Permissions.CanManageServers(user?.RoleId);
             ManageUsers.Visible = Permissions.CanManageUsers(user?.RoleId);
-
-            ManageDepartments.ServerClick += (s, e) => { Response.Redirect("~/Manage/Departments.aspx"); };
-            ManageServers.ServerClick += (s, e) => { Response.Redirect("~/Manage/Servers.aspx"); };
-            ManageUsers.ServerClick += (s, e) => { Response.Redirect("~/Manage/Users.aspx"); };
         }
 
         private void InitializeDropdowns()
@@ -249,6 +245,21 @@ namespace Ksu.PasswordLocker
         {
             LoginGrid.EditIndex = -1;
             RefreshGrid();
+        }
+
+        protected void ManageDepartments_OnServerClick(object sender, EventArgs e)
+        {
+            Response.Redirect("~/Manage/Departments.aspx");
+        }
+
+        protected void ManageServers_OnServerClick(object sender, EventArgs e)
+        {
+            Response.Redirect("~/Manage/Servers.aspx");
+        }
+
+        protected void ManageUsers_OnServerClick(object sender, EventArgs e)
+        {
+            Response.Redirect("~/Manage/Users.aspx");
         }
     }
 }
