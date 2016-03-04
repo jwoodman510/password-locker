@@ -29,7 +29,13 @@ namespace Ksu.PasswordLocker
                 return;
 
             if (string.IsNullOrEmpty(Context.User?.Identity?.Name))
+            {
+                // Not logged in.
                 return;
+            }
+
+            AddLogin.Visible = true;
+            SearchText.Visible = true;
 
             var userId = Context.User.Identity.GetUserId();
             var user = _userCache.Get(userId);

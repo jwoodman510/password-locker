@@ -2,7 +2,7 @@
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
     <br/>
     <div class="row">
-        <asp:Label runat="server" style="padding-left: 15px;" ID="RoleName" Font-Bold="True">Logged in as: Anonymous User</asp:Label>
+        <asp:Label runat="server" style="padding-left: 15px;" ID="RoleName" Font-Bold="True">Anonymous User</asp:Label>
     </div>
     <div class="row" style="padding-top: 10px;"></div>
     <div class="row">
@@ -32,7 +32,7 @@
     </div>
     <div class="row" style="padding-top: 10px;">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <button runat="server" ID="AddLogin" class="btn btn-mini">
+            <button runat="server" ID="AddLogin" class="btn btn-mini" Visible="False">
                     <i class="fa fa-plus-square"></i>
                     <span>Create Login</span>
             </button>
@@ -40,7 +40,7 @@
     </div>
     <div class="row" style="padding-top: 15px; padding-left: 15px;">
         <asp:Panel runat="server" DefaultButton="SearchTextButton">
-            <asp:TextBox ID="SearchText" runat="server" CssClass="modalTextInput"></asp:TextBox>
+            <asp:TextBox ID="SearchText" runat="server" CssClass="modalTextInput" Visible="False"></asp:TextBox>
             <asp:Button ID="SearchTextButton" runat="server" Text="Search" style="display:none;" OnClick="SearchTextButton_OnClick" />
         </asp:Panel>
     </div>
