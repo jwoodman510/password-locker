@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Web.UI;
+using Ksu.DataAccess;
 using Ksu.DataAccess.Dal;
+using Ksu.Encryption;
 using Ksu.Global.Constants;
 using Ksu.Global.Extensions;
 using Ksu.Model;
@@ -15,6 +17,7 @@ namespace Ksu.PasswordLocker
         private readonly IUserCache _userCache = IoC.Resolve<IUserCache>();
         private readonly IServerDal _serverDal = IoC.Resolve<IServerDal>();
         private readonly IDepartmentDal _departmentDal = IoC.Resolve<IDepartmentDal>();
+        private readonly IServerLoginDal _serverLoginDal = IoC.Resolve<IServerLoginDal>();
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -53,18 +56,68 @@ namespace Ksu.PasswordLocker
             var user = _userCache.Get(userId);
             var companyId = user.CompanyId;
 
-            _serverDal.GetByCompany(companyId)
-                .ToSafeList()
-                .ForEach(s => ServerDropDown.Items.Add(s.ServerName));
+            ServerDropDown.DataSource = _serverDal.GetByCompany(companyId).ToSafeList();
+            ServerDropDown.DataBind();
 
-            _departmentDal.GetByCompany(companyId)
-                .ToSafeList()
-                .ForEach(d => DepartmentDropDown.Items.Add(d.DepartmentName));
+            DepartmentDropDown.DataSource = _departmentDal.GetByCompany(companyId).ToSafeList();
+            DepartmentDropDown.DataBind();
         }
         
         protected void addLoginSave_OnClick(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            var serverId = int.Parse(ServerDropDown.SelectedValue);
+            var departmentId = int.Parse(DepartmentDropDown.SelectedValue);
+
+            var error = ValidateNewLogin(serverId, departmentId);
+
+            if (!string.IsNullOrEmpty(error))
+            {
+                LoginErrorMessage.Text = error;
+                AddLoginPopupExtender.Show();
+                return;
+            }
+
+            try
+            {
+                var encryptedPassword = CryptoKey.Encrypt(UserPasswordInput.Text, Keys.Biscuits);
+
+                _serverLoginDal.Create(new ServerLogin
+                {
+                    ServerId = serverId,
+                    DepartmentId = departmentId,
+                    UserName = UserNameInput.Text,
+                    PasswordHash = encryptedPassword
+                });
+
+                LoginErrorMessage.Text = string.Empty;
+                UserNameInput.Text = string.Empty;
+                UserPasswordInput.Text = string.Empty;
+                UserConfirmInput.Text = string.Empty;
+
+                InitializeDropdowns();
+            }
+            catch (Exception ex)
+            {
+                LoginErrorMessage.Text = "Error occured while creating login.";
+                AddLoginPopupExtender.Show();
+            }
+        }
+
+        private string ValidateNewLogin(int serverId, int departmentId)
+        {
+            if (string.IsNullOrWhiteSpace(UserNameInput.Text))
+                return "User Name cannot be empty.";
+
+            if (string.IsNullOrWhiteSpace(UserPasswordInput.Text))
+                return "Password cannot be empty.";
+
+            if (!UserPasswordInput.Text.Equals(UserConfirmInput.Text))
+                return "Passwords do not match.";
+
+            if (_serverLoginDal.GetByUserName(UserNameInput.Text, departmentId, serverId) != null)
+                return "User Name already exists.";
+
+            return string.Empty;
         }
     }
 }

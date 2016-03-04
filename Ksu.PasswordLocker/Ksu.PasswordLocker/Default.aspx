@@ -56,9 +56,9 @@
         <hr />
         <div>
             <asp:Label runat="server" Font-Bold="True">Server:</asp:Label>
-            <asp:DropDownList runat="server" ID="ServerDropDown"></asp:DropDownList>
+            <asp:DropDownList runat="server" ID="ServerDropDown" DataTextField="ServerName" DataValueField="ServerId"></asp:DropDownList>
             <asp:Label runat="server" Font-Bold="True" style="padding-left: 10px;">Department:</asp:Label>
-            <asp:DropDownList runat="server" ID="DepartmentDropDown"></asp:DropDownList>
+            <asp:DropDownList runat="server" ID="DepartmentDropDown" DataTextField="DepartmentName" DataValueField="DepartmentId"></asp:DropDownList>
         </div>
         <hr />
         <div style="text-align: right; padding-top: 20px;">
