@@ -1,6 +1,7 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Departments.aspx.cs" Inherits="Ksu.PasswordLocker.Manage.Departments" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+    <link href="../Styles/styles.css" rel="stylesheet" type="text/css"/>
     <h1>Departments</h1>
     <br/>
     <div class="row">
