@@ -38,14 +38,14 @@
             </button>
         </div>
     </div>
-    <div class="row" style="padding-top: 15px;">
+    <div class="row" style="padding-top: 15px; padding-left: 15px;">
         <asp:Panel runat="server" DefaultButton="SearchTextButton">
             <asp:TextBox ID="SearchText" runat="server" CssClass="modalTextInput"></asp:TextBox>
             <asp:Button ID="SearchTextButton" runat="server" Text="Search" style="display:none;" OnClick="SearchTextButton_OnClick" />
         </asp:Panel>
     </div>
-    <div class="row text-danger"><h4><asp:Literal runat="server" ID="GridError"></asp:Literal></h4></div>
-    <div class="row">
+    <div class="row text-danger" style="padding-left: 15px;"><h4><asp:Literal runat="server" ID="GridError"></asp:Literal></h4></div>
+    <div class="row" style="padding-left: 15px;">
         <asp:GridView runat="server" ID="LoginGrid"
             AutoGenerateColumns="False"
             DataKeyNames="ServerLoginId"
@@ -64,7 +64,17 @@
             <AlternatingRowStyle BackColor="#CCCCCC" />
             <Columns>
                 <asp:BoundField DataField="UserName" HeaderText="User Name"/>
-                <asp:BoundField DataField="Password" HeaderText="Password"/>
+                <asp:TemplateField HeaderText="Password">
+                    <EditItemTemplate>
+                        <asp:TextBox ID="TextBox1" runat="server" Text='<%# Bind("Password") %>'></asp:TextBox>
+                    </EditItemTemplate>
+                    <ItemTemplate>
+                        <asp:Label ID="ShowPass" runat="server" Text='<%# Bind("Password") %>' hidden="True"></asp:Label>
+                        <asp:Label ID="HidePass" runat="server" Text="*******"></asp:Label>
+                        &nbsp;
+                        <a style="cursor: pointer; float: right;" onclick="togglePassword(this)">show/hide</a>
+                    </ItemTemplate>
+                </asp:TemplateField>
                 <asp:BoundField DataField="DepartmentName" HeaderText="Department" ReadOnly="True"/>
                 <asp:BoundField DataField="ServerName" HeaderText="Server" ReadOnly="True"/>
                 <asp:CommandField ShowEditButton="True" />
@@ -97,10 +107,10 @@
         </div>
         <hr />
         <div>
-            <asp:Label runat="server" Font-Bold="True">Server:</asp:Label>
-            <asp:DropDownList runat="server" ID="ServerDropDown" DataTextField="ServerName" DataValueField="ServerId"></asp:DropDownList>
             <asp:Label runat="server" Font-Bold="True" style="padding-left: 10px;">Department:</asp:Label>
             <asp:DropDownList runat="server" ID="DepartmentDropDown" DataTextField="DepartmentName" DataValueField="DepartmentId"></asp:DropDownList>
+            <asp:Label runat="server" Font-Bold="True">Server:</asp:Label>
+            <asp:DropDownList runat="server" ID="ServerDropDown" DataTextField="ServerName" DataValueField="ServerId"></asp:DropDownList>
         </div>
         <hr />
         <div style="text-align: right; padding-top: 20px;">
@@ -131,6 +141,24 @@
             document.getElementById('useNamePasswordInput').firstChild.value = "";
             document.getElementById('useNameConfirmInput').firstChild.value = "";
             $find('AddLoginModal').hide();
+        }
+        function togglePassword(link) {
+            var rowIndex = link.parentNode.parentNode.rowIndex - 1;
+            var showLabelId = 'MainContent_LoginGrid_ShowPass_' + rowIndex.toString();
+            var hideLabelId = 'MainContent_LoginGrid_HidePass_' + rowIndex.toString();
+
+            var hideLabel = document.getElementById(showLabelId);
+            var showLabel = document.getElementById(hideLabelId);
+
+            if (hideLabel.hidden)
+                hideLabel.hidden = false;
+            else
+                hideLabel.hidden = true;
+
+            if (showLabel.hidden)
+                showLabel.hidden = false;
+            else
+                showLabel.hidden = true;
         }
     </script>
 </asp:Content>

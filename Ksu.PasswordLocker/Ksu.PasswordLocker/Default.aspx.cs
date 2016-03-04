@@ -100,6 +100,7 @@ namespace Ksu.PasswordLocker
                 UserConfirmInput.Text = string.Empty;
 
                 InitializeDropdowns();
+                RefreshGrid();
             }
             catch (Exception)
             {

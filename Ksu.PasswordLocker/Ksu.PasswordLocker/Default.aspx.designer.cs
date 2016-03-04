@@ -121,15 +121,6 @@ namespace Ksu.PasswordLocker {
         protected global::System.Web.UI.WebControls.Label LoginPopupHeader;
         
         /// <summary>
-        /// ServerDropDown control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ServerDropDown;
-        
-        /// <summary>
         /// DepartmentDropDown control.
         /// </summary>
         /// <remarks>
@@ -137,6 +128,15 @@ namespace Ksu.PasswordLocker {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DepartmentDropDown;
+        
+        /// <summary>
+        /// ServerDropDown control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ServerDropDown;
         
         /// <summary>
         /// UserNameInput control.
