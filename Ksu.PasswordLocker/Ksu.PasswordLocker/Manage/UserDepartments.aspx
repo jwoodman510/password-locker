@@ -1,6 +1,7 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="UserDepartments.aspx.cs" Inherits="Ksu.PasswordLocker.Manage.UserDepartments" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+    <link href="../Styles/styles.css" rel="stylesheet" type="text/css"/>
     <div class="row">
         <asp:Label ID="UserName" runat="server" Text="" stye="font-size:24;font-weight:bold;"></asp:Label>
     </div>

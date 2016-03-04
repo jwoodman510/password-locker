@@ -1,6 +1,7 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Users.aspx.cs" Inherits="Ksu.PasswordLocker.Manage.Users" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+    <link href="../Styles/styles.css" rel="stylesheet" type="text/css"/>
     <h1>Users</h1>
     <br/>
     <div class="row">
