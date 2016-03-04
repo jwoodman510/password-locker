@@ -8,19 +8,19 @@
     <div class="row" style="padding-top: 10px;"></div>
     <div class="row">
         <div class="col-lg-2 col-md-2 col-sm-3 col-xs-3">
-            <button runat="server" ID="ManageDepartments" class="btn btn-mini" Visible="False">
+            <button runat="server" ID="ManageDepartments" class="btn btn-mini" Visible="False" OnServerClick="ManageDepartments_OnServerClick">
                 <i class="fa fa-exchange"></i>
                 <span>Departments</span>
             </button>
         </div>
         <div class="col-lg-2 col-md-2 col-sm-3 col-xs-3">
-            <button runat="server" ID="ManageServers" class="btn btn-mini" Visible="False">
+            <button runat="server" ID="ManageServers" class="btn btn-mini" Visible="False" OnServerClick="ManageServers_OnServerClick">
                 <i class="fa fa-exchange"></i>
                 <span>Servers</span>
             </button>
         </div>
         <div class="col-lg-8 col-md-8 col-sm-6 col-xs-6">
-            <button runat="server" ID="ManageUsers" class="btn btn-mini" Visible="False">
+            <button runat="server" ID="ManageUsers" class="btn btn-mini" Visible="False" OnServerClick="ManageUsers_OnServerClick">
                 <i class="fa fa-exchange"></i>
                 <span>Users</span>
             </button>
