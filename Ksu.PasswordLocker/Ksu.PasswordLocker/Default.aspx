@@ -38,6 +38,48 @@
             </button>
         </div>
     </div>
+    <div class="row" style="padding-top: 15px;">
+        <asp:Panel runat="server" DefaultButton="SearchTextButton">
+            <asp:TextBox ID="SearchText" runat="server" CssClass="modalTextInput"></asp:TextBox>
+            <asp:Button ID="SearchTextButton" runat="server" Text="Search" style="display:none;" OnClick="SearchTextButton_OnClick" />
+        </asp:Panel>
+    </div>
+    <div class="row text-danger"><h4><asp:Literal runat="server" ID="GridError"></asp:Literal></h4></div>
+    <div class="row">
+        <asp:GridView runat="server" ID="LoginGrid"
+            AutoGenerateColumns="False"
+            DataKeyNames="ServerLoginId"
+            Width="800px"
+            BackColor="White"
+            BorderColor="#999999"
+            BorderStyle="Solid"
+            BorderWidth="1px"
+            CellPadding="3"
+            ForeColor="Black"
+            GridLines="Vertical"
+            OnRowDeleting="LoginGrid_OnRowDeleting"
+            OnRowUpdating="LoginGrid_OnRowUpdating"
+            OnRowEditing="LoginGrid_OnRowEditing"
+            OnRowCancelingEdit="LoginGrid_OnRowCancelingEdit">
+            <AlternatingRowStyle BackColor="#CCCCCC" />
+            <Columns>
+                <asp:BoundField DataField="UserName" HeaderText="User Name"/>
+                <asp:BoundField DataField="Password" HeaderText="Password"/>
+                <asp:BoundField DataField="DepartmentName" HeaderText="Department" ReadOnly="True"/>
+                <asp:BoundField DataField="ServerName" HeaderText="Server" ReadOnly="True"/>
+                <asp:CommandField ShowEditButton="True" />
+                <asp:CommandField ShowDeleteButton="True" />
+            </Columns>
+            <FooterStyle BackColor="#CCCCCC" />
+            <HeaderStyle BackColor="Black" Font-Bold="True" ForeColor="White" />
+            <PagerStyle BackColor="#999999" ForeColor="Black" HorizontalAlign="Center" />
+            <SelectedRowStyle BackColor="#000099" Font-Bold="True" ForeColor="White" />
+            <SortedAscendingCellStyle BackColor="#F1F1F1" />
+            <SortedAscendingHeaderStyle BackColor="#808080" />
+            <SortedDescendingCellStyle BackColor="#CAC9C9" />
+            <SortedDescendingHeaderStyle BackColor="#383838" />
+        </asp:GridView>
+    </div>
     <%--Add Login Modal--%>
     <ajaxToolkit:ModalPopupExtender ID="AddLoginPopupExtender"
         runat="server"

@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Web.UI;
+using System.Web.UI.WebControls;
 using Ksu.DataAccess;
 using Ksu.DataAccess.Dal;
+using Ksu.DataAccess.Exception;
 using Ksu.Encryption;
 using Ksu.Global.Constants;
 using Ksu.Global.Extensions;
@@ -37,6 +41,7 @@ namespace Ksu.PasswordLocker
                 : string.Empty;
 
             InitializeDropdowns();
+            RefreshGrid();
         }
 
         private void SetPermissions(CachedUser user)
@@ -96,7 +101,7 @@ namespace Ksu.PasswordLocker
 
                 InitializeDropdowns();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 LoginErrorMessage.Text = "Error occured while creating login.";
                 AddLoginPopupExtender.Show();
@@ -118,6 +123,125 @@ namespace Ksu.PasswordLocker
                 return "User Name already exists.";
 
             return string.Empty;
+        }
+
+        private void RefreshGrid()
+        {
+            var userId = Context.User.Identity.GetUserId();
+            var user = _userCache.Get(userId);
+
+            var logins = Permissions.IsAdmin(user.RoleId)
+                ? _serverLoginDal.GetByCompany(user.CompanyId)
+                : _serverLoginDal.GetByUser(userId);
+
+            var flattened = logins
+                ?.Select(l => new FlattenedServerLogin
+                {
+                    ServerLoginId = l.ServerLoginId,
+                    ServerId = l.ServerId,
+                    DepartmentId = l.DepartmentId,
+                    UserName = l.UserName,
+                    Password = CryptoKey.Decrypt(l.PasswordHash, Keys.Biscuits),
+                    DepartmentName = l.Department.DepartmentName,
+                    ServerName = l.Server.ServerName
+                }).ToSafeList() ?? new List<FlattenedServerLogin>();
+
+            LoginGrid.DataSource = string.IsNullOrEmpty(SearchText.Text)
+                ? flattened
+                : flattened.Where(l => l.UserName.ToLower().Contains(SearchText.Text.ToLower())).ToList();
+
+            LoginGrid.DataBind();
+        }
+
+        protected void SearchTextButton_OnClick(object sender, EventArgs e)
+        {
+            RefreshGrid();
+        }
+
+        protected void LoginGrid_OnRowDeleting(object sender, GridViewDeleteEventArgs e)
+        {
+            GridError.Text = string.Empty;
+
+            var id = LoginGrid?.DataKeys[e.RowIndex]?.Value;
+
+            if (id == null)
+                return;
+
+            try
+            {
+                _serverLoginDal.Delete((int)id);
+                RefreshGrid();
+            }
+            catch (Exception)
+            {
+                GridError.Text = "An error occured while deleting the department.";
+            }
+        }
+
+        protected void LoginGrid_OnRowUpdating(object sender, GridViewUpdateEventArgs e)
+        {
+            GridError.Text = string.Empty;
+
+            var id = LoginGrid?.DataKeys[e.RowIndex]?.Value;
+
+            if (id == null)
+                return;
+
+            var newName = e.NewValues["UserName"].ToString();
+            var newPw = e.NewValues["Password"].ToString();
+            var encrypted = CryptoKey.Encrypt(newPw, Keys.Biscuits);
+
+            var login = _serverLoginDal.Get((int)id);
+
+            if (login.UserName == newName && login.PasswordHash == encrypted)
+            {
+                LoginGrid.EditIndex = -1;
+                return;
+            }
+
+            try
+            {
+                _serverLoginDal.Update(new ServerLogin
+                {
+                    ServerLoginId = (int)id,
+                    ServerId = login.ServerId,
+                    DepartmentId = login.DepartmentId,
+                    UserName = login.UserName,
+                    PasswordHash = encrypted
+                });
+            }
+            catch (ValidationException ex)
+            {
+                GridError.Text = ex.Message;
+            }
+            catch (NotFoundException ex)
+            {
+                GridError.Text = ex.Message;
+
+            }
+            catch (Exception)
+            {
+                GridError.Text = "An error occured while updating the department.";
+            }
+            finally
+            {
+                LoginGrid.EditIndex = -1;
+                RefreshGrid();
+            }
+        }
+
+        protected void LoginGrid_OnRowEditing(object sender, GridViewEditEventArgs e)
+        {
+            GridError.Text = string.Empty;
+            LoginGrid.EditIndex = e.NewEditIndex;
+
+            RefreshGrid();
+        }
+
+        protected void LoginGrid_OnRowCancelingEdit(object sender, GridViewCancelEditEventArgs e)
+        {
+            LoginGrid.EditIndex = -1;
+            RefreshGrid();
         }
     }
 }

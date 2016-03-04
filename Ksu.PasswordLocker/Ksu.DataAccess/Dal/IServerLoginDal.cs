@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using Ksu.DataAccess.Exception;
 
@@ -7,6 +8,8 @@ namespace Ksu.DataAccess.Dal
 {
     public interface IServerLoginDal
     {
+        ServerLogin Get(int id);
+
         IEnumerable<ServerLogin> GetByCompany(int companyId);
 
         IEnumerable<ServerLogin> GetByUser(string userId);
@@ -14,6 +17,10 @@ namespace Ksu.DataAccess.Dal
         ServerLogin GetByUserName(string userName, int departmentId, int serverId);
 
         ServerLogin Create(ServerLogin login);
+
+        void Delete(int id);
+
+        void Update(ServerLogin login);
     }
 
     public class ServerLoginDal : IServerLoginDal
@@ -22,6 +29,13 @@ namespace Ksu.DataAccess.Dal
         public ServerLoginDal(IContextProvider context)
         {
             _context = context;
+        }
+
+        public ServerLogin Get(int id)
+        {
+            return _context.ServerLogins
+                   .AsNoTracking()
+                   .FirstOrDefault(s => s.ServerLoginId == id);
         }
 
         public IEnumerable<ServerLogin> GetByCompany(int companyId)
@@ -78,6 +92,48 @@ namespace Ksu.DataAccess.Dal
             _context.SaveChanges();
 
             return result;
+        }
+
+        public void Delete(int id)
+        {
+            var existing = _context.Departments.Find(id);
+
+            if (existing == null)
+                return;
+
+            var entry = _context.Entry(existing);
+            entry.State = EntityState.Deleted;
+
+            _context.SaveChanges();
+        }
+
+        public void Update(ServerLogin login)
+        {
+            var previous = _context.ServerLogins.Find(login.ServerLoginId);
+
+            if (previous == null)
+                throw new NotFoundException("ServerLogin not found.");
+            
+            if (string.IsNullOrWhiteSpace(login.UserName))
+                throw new ValidationException("Missing UserName");
+
+            if (string.IsNullOrWhiteSpace(login.PasswordHash))
+                throw new ValidationException("Missing Password");
+
+            if (!login.UserName.Equals(previous.UserName, StringComparison.InvariantCultureIgnoreCase) &&
+                GetByUserName(login.UserName, previous.DepartmentId, previous.ServerId) != null)
+            {
+                throw new ValidationException("User Name already exists.");
+            }
+
+            var entry = _context.Entry(previous);
+
+            entry.Entity.UserName = login.UserName;
+            entry.Entity.PasswordHash = login.PasswordHash;
+
+            _context.SaveChanges();
+
+            _context.Entry(previous).State = EntityState.Detached;
         }
     }
 }
