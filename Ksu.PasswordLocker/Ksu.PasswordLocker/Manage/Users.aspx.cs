@@ -66,6 +66,8 @@ namespace Ksu.PasswordLocker.Manage
                 AddRoleAndCompany(newUser, company.CompanyId);
                 UserErrorMessage.Text = string.Empty;
                 UserEmailInput.Text = string.Empty;
+                UserPasswordInput.Text = string.Empty;
+                UserConfirmInput.Text = string.Empty;
             }
             else
             {

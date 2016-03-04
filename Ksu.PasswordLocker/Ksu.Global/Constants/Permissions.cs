@@ -37,5 +37,11 @@
             return roleId == Roles.SysAdmin.Id
                 || roleId == Roles.CompanyAdmin.Id;
         }
+
+        public static bool IsAdmin(string roleId)
+        {
+            return roleId == Roles.SysAdmin.Id
+                || roleId == Roles.CompanyAdmin.Id;
+        }
     }
 }
