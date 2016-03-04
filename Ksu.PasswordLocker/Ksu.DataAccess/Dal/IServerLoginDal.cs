@@ -96,7 +96,7 @@ namespace Ksu.DataAccess.Dal
 
         public void Delete(int id)
         {
-            var existing = _context.Departments.Find(id);
+            var existing = _context.ServerLogins.Find(id);
 
             if (existing == null)
                 return;
