@@ -68,6 +68,7 @@ namespace Ksu.PasswordLocker.Manage
                 UserEmailInput.Text = string.Empty;
                 UserPasswordInput.Text = string.Empty;
                 UserConfirmInput.Text = string.Empty;
+                RefreshGrid();
             }
             else
             {
