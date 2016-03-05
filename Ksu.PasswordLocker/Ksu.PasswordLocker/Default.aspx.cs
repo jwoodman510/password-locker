@@ -63,11 +63,10 @@ namespace Ksu.PasswordLocker
             var user = _userCache.Get(userId);
             var companyId = user.CompanyId;
 
-            ServerDropDown.DataSource = _serverDal.GetByCompany(companyId).ToSafeList();
-            ServerDropDown.DataBind();
-
             DepartmentDropDown.DataSource = _departmentDal.GetByCompany(companyId).ToSafeList();
             DepartmentDropDown.DataBind();
+
+            RefreshServers();
         }
         
         protected void addLoginSave_OnClick(object sender, EventArgs e)
@@ -269,6 +268,23 @@ namespace Ksu.PasswordLocker
         protected void ManageUsers_OnServerClick(object sender, EventArgs e)
         {
             Response.Redirect("~/Manage/Users.aspx");
+        }
+
+        protected void DepartmentDropDown_OnSelectedIndexChanged(object sender, EventArgs e)
+        {
+            RefreshServers();
+        }
+
+        private void RefreshServers()
+        {
+            if (string.IsNullOrWhiteSpace(DepartmentDropDown.SelectedValue))
+                return;
+
+            var departmentId = int.Parse(DepartmentDropDown.SelectedValue);
+
+            ServerDropDown.DataSource = _serverDal.GetByDepartment(departmentId);
+            ServerDropDown.DataBind();
+            AddLoginPopupExtender.Show();
         }
     }
 }
