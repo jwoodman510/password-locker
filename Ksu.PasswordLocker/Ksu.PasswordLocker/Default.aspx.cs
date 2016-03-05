@@ -77,6 +77,15 @@ namespace Ksu.PasswordLocker
 
             var error = ValidateNewLogin(serverId, departmentId);
 
+            var department = _departmentDal.Get(departmentId);
+
+            if (department.Servers.All(s => s.ServerId != serverId))
+            {
+                LoginErrorMessage.Text = "Department does not have access to server.";
+                AddLoginPopupExtender.Show();
+                return;
+            }
+
             if (!string.IsNullOrEmpty(error))
             {
                 LoginErrorMessage.Text = error;
