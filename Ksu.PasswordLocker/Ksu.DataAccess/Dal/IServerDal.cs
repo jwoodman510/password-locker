@@ -12,6 +12,7 @@ namespace Ksu.DataAccess.Dal
 
         Server GetByName(string name, int companyId);
         IEnumerable<Server> GetByCompany(int companyId);
+        IEnumerable<Server> GetByDepartment(int departmentId);
 
         Server Create(Server server);
 
@@ -61,6 +62,15 @@ namespace Ksu.DataAccess.Dal
                 .AsNoTracking()
                 .AsQueryable()
                 .Where(d => d.CompanyId == companyId);
+        }
+
+        public IEnumerable<Server> GetByDepartment(int departmentId)
+        {
+            var dept = _context.Departments
+                .AsNoTracking()
+                .FirstOrDefault(d => d.DepartmentId == departmentId);
+
+            return dept?.Servers ?? new List<Server>();
         }
 
         public Server Create(Server server)

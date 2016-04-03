@@ -109,7 +109,7 @@
         <hr />
         <div>
             <asp:Label runat="server" Font-Bold="True" style="padding-left: 10px;">Department:</asp:Label>
-            <asp:DropDownList runat="server" ID="DepartmentDropDown" DataTextField="DepartmentName" DataValueField="DepartmentId"></asp:DropDownList>
+            <asp:DropDownList runat="server" ID="DepartmentDropDown" DataTextField="DepartmentName" DataValueField="DepartmentId" OnSelectedIndexChanged="DepartmentDropDown_OnSelectedIndexChanged" AutoPostBack="True"></asp:DropDownList>
             <asp:Label runat="server" Font-Bold="True">Server:</asp:Label>
             <asp:DropDownList runat="server" ID="ServerDropDown" DataTextField="ServerName" DataValueField="ServerId"></asp:DropDownList>
         </div>
