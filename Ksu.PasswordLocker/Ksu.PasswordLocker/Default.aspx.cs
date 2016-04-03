@@ -284,7 +284,9 @@ namespace Ksu.PasswordLocker
 
             ServerDropDown.DataSource = _serverDal.GetByDepartment(departmentId);
             ServerDropDown.DataBind();
-            AddLoginPopupExtender.Show();
+            
+            if(Page.IsPostBack)
+                AddLoginPopupExtender.Show();
         }
     }
 }
